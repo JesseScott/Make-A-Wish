@@ -25,6 +25,10 @@
                         {
                             "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -36,6 +40,9 @@
             "PACKAGE_NAME": "tt.co.jesses.makeawish"
         },
         "org.apache.cordova.console": {
+            "PACKAGE_NAME": "tt.co.jesses.makeawish"
+        },
+        "org.apache.cordova.device": {
             "PACKAGE_NAME": "tt.co.jesses.makeawish"
         }
     },

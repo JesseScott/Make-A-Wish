@@ -27,6 +27,13 @@ module.exports = [
         "merges": [
             "navigator.notification"
         ]
+    },
+    {
+        "file": "plugins/com.phonegap.plugins.PushPlugin/www/PushNotification.js",
+        "id": "com.phonegap.plugins.PushPlugin.PushNotification",
+        "clobbers": [
+            "PushNotification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -35,7 +42,8 @@ module.exports.metadata =
     "org.apache.cordova.splashscreen": "0.3.5",
     "org.apache.cordova.console": "0.2.12",
     "org.apache.cordova.device": "0.2.13",
-    "org.apache.cordova.dialogs": "0.2.11"
+    "org.apache.cordova.dialogs": "0.2.11",
+    "com.phonegap.plugins.PushPlugin": "2.4.0"
 }
 // BOTTOM OF METADATA
 });

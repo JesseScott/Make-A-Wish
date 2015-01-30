@@ -39,6 +39,10 @@
                         {
                             "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"PushPlugin\"><param name=\"ios-package\" value=\"PushPlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -56,6 +60,9 @@
             "PACKAGE_NAME": "tt.co.jesses.makeawish"
         },
         "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "tt.co.jesses.makeawish"
+        },
+        "com.phonegap.plugins.PushPlugin": {
             "PACKAGE_NAME": "tt.co.jesses.makeawish"
         }
     },

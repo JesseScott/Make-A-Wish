@@ -33,7 +33,7 @@
     <body>
 
         <div class="app">
-            <h1>Apache Cordova</h1>
+            <h1>Make A Wish</h1>
 
         </div>
 
@@ -44,6 +44,7 @@
 
             // Globals
             var wishes = ['1:11', '2:22', '3:33', '4:44', '5:55', '10:10', '11:11', '12:12'];
+            var fired = false;
 
             // Event Listeners
             document.addEventListener("deviceready", onDeviceReady, false);
@@ -61,6 +62,7 @@
               {
                 if(wishes[i].localeCompare(time) == 0)
                 {
+                  fired = true;
                   console.log("MAKE A WISH!!!!");
                 }
               }
@@ -74,6 +76,7 @@
               var mins = ('0' + now.getMinutes()).slice(-2);
               var time = hrs + ":" + mins;
               console.log("the time is " + time);
+              fired = false;
               checkForWish(time);
             }
 

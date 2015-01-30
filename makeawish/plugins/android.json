@@ -20,6 +20,9 @@
     "installed_plugins": {
         "org.apache.cordova.splashscreen": {
             "PACKAGE_NAME": "tt.co.jesses.makeawish"
+        },
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "tt.co.jesses.makeawish"
         }
     },
     "dependent_plugins": {}

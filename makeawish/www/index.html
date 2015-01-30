@@ -42,6 +42,9 @@
 
         <script type="text/javascript">
 
+            // Globals
+            var wishes = ['1:11', '2:22', '3:33', '4:44', '5:55', '10:10', '11:11', '12:12'];
+
             // Event Listeners
             document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -51,18 +54,29 @@
 
             }
 
+            // Wish Time
+            function checkForWish(time)
+            {
+              for(i = 0; i < wishes.length; i++)
+              {
+                if(wishes[i].localeCompare(time) == 0)
+                {
+                  console.log("MAKE A WISH!!!!");
+                }
+              }
+            }
+
             // Timer
             function getTime()
             {
-
               var now = new Date();
               var hrs = now.getHours();
-              var mins = now.getMinutes();
+              var mins = ('0' + now.getMinutes()).slice(-2);
               var time = hrs + ":" + mins;
               console.log("the time is " + time);
-
-
+              checkForWish(time);
             }
+
             setInterval(getTime, 60000);
 
 

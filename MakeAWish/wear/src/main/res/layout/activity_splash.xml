@@ -8,6 +8,6 @@
     android:layout_height="match_parent"
     app:rectLayout="@layout/rect_activity_splash"
     app:roundLayout="@layout/round_activity_splash"
-    tools:context="tt.co.jesses.makeawish.SplashActivity"
+    tools:context="tt.co.jesses.makeawish.Activities.SplashActivity"
     tools:deviceIds="wear">
 </android.support.wearable.view.WatchViewStub>

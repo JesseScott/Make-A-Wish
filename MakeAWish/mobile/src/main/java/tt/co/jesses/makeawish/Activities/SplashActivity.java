@@ -1,5 +1,6 @@
 package tt.co.jesses.makeawish.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,21 +28,24 @@ public class SplashActivity extends AppCompatActivity
         label.animate().alpha(1.0f).setDuration(WAIT_TIME);
 
         // Thread
-//        Thread timer = new Thread() {
-//            @Override
-//            public void run() {
-//                super.run();
-//                try {
-//                    sleep(WAIT_TIME * 2);
-//                    Log.d(TAG, "SplashActivity ready to dismiss");
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } finally {
-//                    finish();
-//                }
-//            }
-//        };
-//        timer.start();
+        Thread timer = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    sleep(WAIT_TIME * 2);
+                    Log.d(TAG, "SplashActivity ready to dismiss");
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                } catch (InterruptedException e) {
+                    Log.d(TAG, "ERROR");
+                    e.printStackTrace();
+                } finally {
+                    finish();
+                }
+            }
+        };
+        timer.start();
 
 
     }

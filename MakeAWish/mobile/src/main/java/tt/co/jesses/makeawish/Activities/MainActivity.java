@@ -22,7 +22,12 @@ public class MainActivity extends AppCompatActivity
 {
     private static final String TAG = "MAKEAWISH_MAIN";
 
-    String[] times = new String[14];
+    String[] times =
+            {
+            "01:11", "02:22", "03:33", "4:44", "5:55",
+            "10:10", "11:11", "12:12", "13:11", "14:22",
+            "15:33", "16:44", "17:55", "22:10", "23:11"
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,9 +43,6 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "MainActivity created");
 
         MakeAWish.getInstance();
-
-        // Set Times
-        setupTimes();
 
         // Set Job
         startTimer();
@@ -72,38 +74,22 @@ public class MainActivity extends AppCompatActivity
 
     // Functions
 
-    private void setupTimes()
-    {
-        times[0]  = "01:11";
-        times[1]  = "02:22";
-        times[2]  = "03:33";
-        times[3]  = "4:44";
-        times[4]  = "5:55";
-        times[5]  = "10:10";
-        times[6]  = "11:11";
-        times[7]  = "12:12";
-        times[8]  = "13:11";
-        times[9]  = "14:22";
-        times[10] = "15:33";
-        times[11] = "16:44";
-        times[12] = "17:55";
-        times[13] = "22:10"; // 10:10 PM
-        times[14] = "23:11"; // 11:11 PM
-    }
-
     private void startTimer()
     {
         int milisInAMinute = 60000;
         long time = System.currentTimeMillis();
 
-        final Runnable update = () -> {
-            Date now = new Date();
-            Log.w(TAG, "TIME: " + now.getTime());
+        final Runnable update = new Runnable() {
+            @Override
+            public void run() {
+                Date now = new Date();
+                Log.w(TAG, "TIME: " + now.getTime());
 
-            Calendar c = Calendar.getInstance();
-            String formattedTime = String.format("%d:%tM%n", c.get(Calendar.HOUR_OF_DAY), c);
-            Log.w(TAG, "CAL: " + formattedTime );
-            Toast.makeText(MainActivity.this, formattedTime, Toast.LENGTH_SHORT).show();
+                Calendar c = Calendar.getInstance();
+                String formattedTime = String.format(R.string.formatted_time, c.get(Calendar.HOUR_OF_DAY), c);
+                Log.w(TAG, "CAL: " + formattedTime );
+                Toast.makeText(MainActivity.this, formattedTime, Toast.LENGTH_SHORT).show();
+            }
         };
 
         Timer timer = new Timer();

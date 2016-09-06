@@ -1,5 +1,6 @@
 package tt.co.jesses.makeawish.Activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -21,6 +24,8 @@ import tt.co.jesses.makeawish.application.MakeAWish;
 public class MainActivity extends AppCompatActivity
 {
     private static final String TAG = "MAKEAWISH_MAIN";
+
+    private final static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     String[] times =
             {
@@ -76,18 +81,19 @@ public class MainActivity extends AppCompatActivity
 
     private void startTimer()
     {
-        int milisInAMinute = 60000;
+        int millisInAMinute = 60000;
         long time = System.currentTimeMillis();
+
+        final Activity mActivity = MainActivity.this;
 
         final Runnable update = new Runnable() {
             @Override
             public void run() {
-                Date now = new Date();
-                Log.w(TAG, "TIME: " + now.getTime());
 
-                Calendar c = Calendar.getInstance();
-                String formattedTime = String.format(R.string.formatted_time, c.get(Calendar.HOUR_OF_DAY), c);
-                Log.w(TAG, "CAL: " + formattedTime );
+                Date now = new Date();
+                String formattedTime = sdf.format(now.getTime());
+
+                Log.w(TAG, "TIME: " + formattedTime );
                 Toast.makeText(MainActivity.this, formattedTime, Toast.LENGTH_SHORT).show();
             }
         };
@@ -95,9 +101,9 @@ public class MainActivity extends AppCompatActivity
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                update.run();
+                mActivity.runOnUiThread(update);
             }
-        }, time % milisInAMinute, milisInAMinute);
+        }, time % millisInAMinute, millisInAMinute);
 
         update.run();
     }

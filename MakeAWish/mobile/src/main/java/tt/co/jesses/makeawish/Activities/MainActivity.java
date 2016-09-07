@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity
 
     String[] times =
             {
-            "01:11", "02:22", "03:33", "4:44", "5:55",
+                    "08:50",
+            "01:11", "02:22", "03:33", "04:44", "05:55",
             "10:10", "11:11", "12:12", "13:11", "14:22",
             "15:33", "16:44", "17:55", "22:10", "23:11"
             };
@@ -42,12 +43,11 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         Log.d(TAG, "MainActivity created");
-
-        MakeAWish.getInstance();
 
         // Set Job
         startTimer();
@@ -82,9 +82,7 @@ public class MainActivity extends AppCompatActivity
     private void startTimer()
     {
         int millisInAMinute = 60000;
-        long time = System.currentTimeMillis();
-
-        final Activity mActivity = MainActivity.this;
+        final long time = System.currentTimeMillis();
 
         final Runnable update = new Runnable() {
             @Override
@@ -94,18 +92,38 @@ public class MainActivity extends AppCompatActivity
                 String formattedTime = sdf.format(now.getTime());
 
                 Log.w(TAG, "TIME: " + formattedTime );
-                Toast.makeText(MainActivity.this, formattedTime, Toast.LENGTH_SHORT).show();
+
+                for (int i = 0; i < times.length; i++) {
+                    if (formattedTime.equalsIgnoreCase(times[i])) {
+                        Log.w(TAG, "MATCH!!");
+                        fireMatch(formattedTime);
+                    }
+                }
             }
         };
+
+        //TODO: find out difference in seconds between now and :00 and use that as the initial delay for the timer
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                mActivity.runOnUiThread(update);
+                update.run();
             }
         }, time % millisInAMinute, millisInAMinute);
 
         update.run();
+    }
+
+    private void fireMatch(String time) {
+        final Activity mActivity = MainActivity.this;
+
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "MATCH", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 

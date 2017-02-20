@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">MakeAWish</string>
+    <string name="app_name">Make a Wish</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="prefs_enable_notifications">Enable notifications</string>
+
 </resources>

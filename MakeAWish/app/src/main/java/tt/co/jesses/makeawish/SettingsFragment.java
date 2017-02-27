@@ -41,12 +41,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        String match = getString(R.string.prefs_enable_daytime_alarms);
-        if ( key.equals(match) ) {
-            Preference preference = findPreference(key);
-            boolean daytimeEnabled = preference.isEnabled();
 
-        }
+        Preference preference = findPreference(key);
+        PreferenceHelper preferenceHelper = new PreferenceHelper();
+        preferenceHelper.setPrefValueByKey(key, preference.isEnabled());
     }
 
 }

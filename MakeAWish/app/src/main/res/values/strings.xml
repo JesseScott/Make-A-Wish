@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Make a Wish</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="notification_placeholder">Show Notification Details Here…</string>
+
+    <string name="receiver_title">Make a Wish!</string>
+    <string name="receiver_text">New Notification!</string>
+    <string name="receiver_ticker">New Message Alert!</string>
+
+    <string name="settings_enable_notifications">Enable notifications</string>
+    <string name="settings_enable_daytime_alarms">Enable Daytime Alarms (10am - 5pm)</string>
+    <string name="settings_enable_nighttime_alarms">Enable Nighttime Alarms (10pm - 5am)</string>
+    <string name="settings_enable_analytics">Enable analytics</string>
+
+    <string name="prefs_enable_notifications">prefs_enable_notifications</string>
+    <string name="prefs_enable_daytime_alarms">prefs_enable_daytime_alarms</string>
+    <string name="prefs_enable_nighttime_alarms">prefs_enable_nighttime_alarms</string>
+    <string name="prefs_enable_analytics">prefs_enable_analytics</string>
+
+    <string name="prefs_daytime_set">prefs_daytime_set</string>
+    <string name="prefs_nighttime_set">prefs_nighttime_set</string>
+
+
+
+</resources>

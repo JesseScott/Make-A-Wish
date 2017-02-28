@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import tt.co.jesses.makeawish.R;
+
 /**
  * Created by jessescott on 2017-02-27.
  */
@@ -23,6 +25,15 @@ public class PreferenceHelper {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key, value);
         editor.apply();
+
+        if (key.equals(mContext.getString(R.string.prefs_enable_daytime_alarms)) || key.equals(mContext.getString(R.string.prefs_enable_nighttime_alarms))) {
+            triggerAlarmRegeneration();
+        }
+    }
+
+    private void triggerAlarmRegeneration() {
+        AlarmHelper alarmHelper = new AlarmHelper(mContext);
+        alarmHelper.setAlarms();
     }
 
     public boolean getPrefValueByKey(String key) {

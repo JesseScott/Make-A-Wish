@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -30,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPreferences = getPreferences(MODE_PRIVATE);
+        //mPreferences = getPreferences(MODE_PRIVATE);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 
         setAlarms();
 
@@ -64,24 +66,28 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         // Test to see if we've already set recurring daytime alarms AND/OR if we have enabled them
-        boolean daytimeEnabled = mPreferences.getBoolean(getString(R.string.settings_enable_daytime_alarms), false);
+        boolean daytimeEnabled = mPreferences.getBoolean(getString(R.string.prefs_enable_daytime_alarms), false);
         boolean daytimeSet = mPreferences.getBoolean(getString(R.string.prefs_daytime_set), false);
         if (!daytimeSet && daytimeEnabled) {
             setCalendarsDaytime();
             for (Calendar calendar : calendarsDaytime) {
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+                if (null != calendar) {
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+                }
             }
             // Set the Preferences
             mPreferences.edit().putBoolean(getString(R.string.prefs_daytime_set), true).apply();
         }
 
         // Test to see if we've already set recurring nighttime alarms AND/OR if we have enabled them
-        boolean nighttimeEnabled = mPreferences.getBoolean(getString(R.string.settings_enable_nighttime_alarms), false);
+        boolean nighttimeEnabled = mPreferences.getBoolean(getString(R.string.prefs_enable_nighttime_alarms), false);
         boolean nighttimeSet = mPreferences.getBoolean(getString(R.string.prefs_nighttime_set), false);
         if (!nighttimeSet && nighttimeEnabled) {
             setCalendarsNighttime();
             for (Calendar calendar : calendarsNighttime) {
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+                if (null != calendar) {
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+                }
             }
             // Set the Preferences
             mPreferences.edit().putBoolean(getString(R.string.prefs_nighttime_set), true).apply();
@@ -97,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
         // 10:10 PM
         calendar.set(Calendar.HOUR_OF_DAY, 22);
         calendar.set(Calendar.MINUTE, 10);
-        calendarsDaytime[0] = calendar;
+        calendarsNighttime[0] = calendar;
         calendar.clear();
 
         // 11:11 PM
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 11);
-        calendarsDaytime[1] = calendar;
+        calendarsNighttime[1] = calendar;
         calendar.clear();
 
         // 12:12 AM

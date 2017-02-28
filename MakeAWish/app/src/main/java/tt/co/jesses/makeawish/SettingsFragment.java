@@ -2,6 +2,7 @@ package tt.co.jesses.makeawish;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
@@ -15,7 +16,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Load Prefs from XML
         addPreferencesFromResource(R.xml.preferences);
     }
 
@@ -33,18 +33,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    public boolean getDaytimeEnabled() {
-        Preference preference = findPreference(getString(R.string.prefs_enable_daytime_alarms));
-        boolean daytimeEnabled = preference.isEnabled();
-        return daytimeEnabled;
-    }
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+        //CheckBoxPreference preference = (CheckBoxPreference) findPreference(key);
         Preference preference = findPreference(key);
-        PreferenceHelper preferenceHelper = new PreferenceHelper();
-        preferenceHelper.setPrefValueByKey(key, preference.isEnabled());
+        if (null != preference && preference instanceof CheckBoxPreference) {
+            CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
+            PreferenceHelper preferenceHelper = new PreferenceHelper(getActivity().getApplicationContext());
+            preferenceHelper.setPrefValueByKey(key, checkBoxPreference.isChecked());
+        }
     }
 
 }

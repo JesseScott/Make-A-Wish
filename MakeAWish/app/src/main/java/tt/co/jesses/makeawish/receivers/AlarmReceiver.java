@@ -7,6 +7,7 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -45,6 +46,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // TODO add RemoteInput to allow for inline wishing
 
+        // TODO sound
+
         Notification notification = builder
                 .setContentTitle(context.getString(R.string.receiver_title))
                 .setContentText(context.getString(R.string.receiver_text))
@@ -52,6 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .setCategory(CATEGORY_ALARM)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 //.setStyle(inboxStyle)
                 .build();
 

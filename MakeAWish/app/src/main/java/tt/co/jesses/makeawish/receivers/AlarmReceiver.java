@@ -1,4 +1,4 @@
-package tt.co.jesses.makeawish;
+package tt.co.jesses.makeawish.receivers;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -9,6 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+
+import tt.co.jesses.makeawish.NotificationActivity;
+import tt.co.jesses.makeawish.R;
 
 import static android.app.Notification.CATEGORY_ALARM;
 

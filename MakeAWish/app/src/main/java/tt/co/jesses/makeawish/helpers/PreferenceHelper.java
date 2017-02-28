@@ -1,4 +1,4 @@
-package tt.co.jesses.makeawish;
+package tt.co.jesses.makeawish.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;

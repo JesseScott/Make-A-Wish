@@ -2,10 +2,13 @@ package tt.co.jesses.makeawish;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import tt.co.jesses.makeawish.helpers.AlarmHelper;
 
@@ -13,11 +16,23 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        recyclerView = (RecyclerView) findViewById(R.id.main_rv);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.main_fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "FAB");
+            }
+        });
 
         AlarmHelper alarmHelper = new AlarmHelper(getApplicationContext());
         alarmHelper.setAlarms();

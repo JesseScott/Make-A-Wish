@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "55228167942",
+    "firebase_url": "https://makeawish-7486c.firebaseio.com",
+    "project_id": "makeawish-7486c",
+    "storage_bucket": "makeawish-7486c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55228167942:android:8f16ee35d5b4235d",
+        "android_client_info": {
+          "package_name": "tt.co.jesses.makeawish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55228167942-cbbvo9r4upsd2mqb7741dfbho56a8j9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tt.co.jesses.makeawish",
+            "certificate_hash": "f855c330a7d07a4fa38d6f2a12ec0fa912656869"
+          }
+        },
+        {
+          "client_id": "55228167942-dvbgo7kb8p1cmt9b6u37ll9trsbhcpif.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy5JaMcCZ0sL5ysNhLfatdy_7qjc-S2xM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55228167942-dvbgo7kb8p1cmt9b6u37ll9trsbhcpif.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

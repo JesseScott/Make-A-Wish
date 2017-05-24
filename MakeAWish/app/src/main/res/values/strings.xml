@@ -22,6 +22,7 @@
     <string name="prefs_daytime_set">prefs_daytime_set</string>
     <string name="prefs_nighttime_set">prefs_nighttime_set</string>
 
+    <string name="prefs_log_event">prefs_log_event</string>
 
 
 </resources>

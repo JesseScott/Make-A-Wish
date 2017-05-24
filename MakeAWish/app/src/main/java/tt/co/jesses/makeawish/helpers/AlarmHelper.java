@@ -1,9 +1,12 @@
 package tt.co.jesses.makeawish.helpers;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import java.util.Calendar;
 
@@ -63,6 +66,15 @@ public class AlarmHelper {
             // Set the Preferences
             mPreferenceHelper.setPrefValueByKey(mContext.getString(R.string.prefs_nighttime_set), true);
         }
+
+        // Log
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(mContext.getString(R.string.prefs_enable_daytime_alarms), daytimeEnabled);
+        bundle.putBoolean(mContext.getString(R.string.prefs_daytime_set), daytimeSet);
+        bundle.putBoolean(mContext.getString(R.string.prefs_enable_nighttime_alarms), nighttimeEnabled);
+        bundle.putBoolean(mContext.getString(R.string.prefs_nighttime_set), nighttimeSet);
+        FirebaseAnalytics.getInstance(mContext).logEvent(mContext.getString(R.string.prefs_log_event), bundle);
+
     }
 
 

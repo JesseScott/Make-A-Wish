@@ -1,5 +1,7 @@
 package tt.co.jesses.makeawish;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
@@ -15,6 +17,9 @@ public class SettingsActivity extends PreferenceActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+
+        FirebaseAnalytics.getInstance(this.getApplicationContext()).setCurrentScreen(SettingsActivity.this, "SettingsActivity", SettingsActivity.class.getSimpleName());
+
     }
 
 }

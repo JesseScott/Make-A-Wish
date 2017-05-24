@@ -1,6 +1,9 @@
 package tt.co.jesses.makeawish;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import android.app.Application;
+import android.provider.Settings;
 import android.util.Log;
 
 /**
@@ -17,6 +20,10 @@ public class App extends Application {
 
         Log.d(TAG, "Application Created");
 
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(getApplicationContext());
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        firebaseAnalytics.setUserId(Settings.Secure.ANDROID_ID);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
     }
 
 }

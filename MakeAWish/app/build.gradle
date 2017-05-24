@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 
-
 //
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -46,17 +45,27 @@ android {
 }
 
 dependencies {
+
     // Google
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:recyclerview-v7:25.3.0'
+    androidTestCompile 'com.android.support:support-annotations:25.3.0'
+
     // Jars
     compile fileTree(include: ['*.jar'], dir: 'libs')
+
     // Tests
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     // Fastlane
     androidTestCompile 'tools.fastlane:screengrab:1.0.0'
     testCompile 'junit:junit:4.12'
+
+    // Firebase
+    compile 'com.google.firebase:firebase-core:10.2.6'
 }
+
+apply plugin: 'com.google.gms.google-services'

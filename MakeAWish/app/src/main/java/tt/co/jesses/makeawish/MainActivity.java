@@ -1,5 +1,7 @@
 package tt.co.jesses.makeawish;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "FAB");
             }
         });
+
+        FirebaseAnalytics.getInstance(this.getApplicationContext()).setCurrentScreen(MainActivity.this, "MainActivity", MainActivity.class.getSimpleName());
 
         AlarmHelper alarmHelper = new AlarmHelper(getApplicationContext());
         alarmHelper.setAlarms();

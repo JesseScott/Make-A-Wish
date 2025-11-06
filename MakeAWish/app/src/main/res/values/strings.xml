@@ -24,5 +24,8 @@
 
     <string name="prefs_log_event">prefs_log_event</string>
 
+    <string name="channel_name">Make a Wish</string>
+    <string name="channel_description">Channel for Make a Wish notifications</string>
+
 
 </resources>

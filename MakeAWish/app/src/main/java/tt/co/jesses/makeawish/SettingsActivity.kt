@@ -1,18 +1,18 @@
 package tt.co.jesses.makeawish
 
 import android.os.Bundle
-import android.preference.PreferenceActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 
 /**
  * Created by jessescott on 2017-02-19.
  */
 
-class SettingsActivity : PreferenceActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fragmentManager.beginTransaction()
+        supportFragmentManager.beginTransaction()
                 .replace(android.R.id.content, SettingsFragment())
                 .commit()
 

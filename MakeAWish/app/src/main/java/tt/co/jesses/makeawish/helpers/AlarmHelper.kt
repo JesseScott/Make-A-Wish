@@ -22,7 +22,7 @@ class AlarmHelper(private val mContext: Context) {
 
     init {
         val intent = Intent(mContext, AlarmReceiver::class.java)
-        mAlarmIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0)
+        mAlarmIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         mAlarmManager = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 

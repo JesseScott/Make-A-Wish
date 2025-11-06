@@ -29,9 +29,9 @@ class AlarmReceiver : BroadcastReceiver() {
         stackBuilder.addParentStack(NotificationActivity::class.java)
         stackBuilder.addNextIntent(notificationIntent)
 
-        val pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        val builder = NotificationCompat.Builder(context)
+        val builder = NotificationCompat.Builder(context, "default")
 
         // TODO explore styles
         //val inboxStyle = NotificationCompat.InboxStyle

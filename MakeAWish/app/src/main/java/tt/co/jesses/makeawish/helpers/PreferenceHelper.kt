@@ -1,7 +1,8 @@
 package tt.co.jesses.makeawish.helpers
 
+
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import tt.co.jesses.makeawish.R
 
 /**

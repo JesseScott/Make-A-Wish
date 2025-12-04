@@ -31,28 +31,23 @@ android {
 }
 
 dependencies {
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Google
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
-    androidTestImplementation 'androidx.annotation:annotation:1.9.1'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 
-    // Jars
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // Firebase
+    implementation 'com.google.firebase:firebase-core:21.1.1'
 
     // Tests
     androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    // Fastlane
     androidTestImplementation 'tools.fastlane:screengrab:2.1.1'
     testImplementation 'junit:junit:4.13.2'
 
-    // Firebase
-    implementation 'com.google.firebase:firebase-core:21.1.1'
-
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

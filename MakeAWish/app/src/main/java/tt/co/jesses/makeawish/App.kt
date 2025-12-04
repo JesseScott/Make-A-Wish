@@ -25,17 +25,15 @@ class App : Application() {
     }
 
     private fun createNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_name)
-            val descriptionText = getString(R.string.channel_description)
-            val importance = android.app.NotificationManager.IMPORTANCE_DEFAULT
-            val channel = android.app.NotificationChannel("default", name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: android.app.NotificationManager =
-                getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
+        val importance = android.app.NotificationManager.IMPORTANCE_DEFAULT
+        val channel = android.app.NotificationChannel("default", name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager: android.app.NotificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     companion object {

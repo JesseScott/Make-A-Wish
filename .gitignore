@@ -1,13 +1,12 @@
 .DS_Store
 
 *.iml
+.idea/*
 
 MakeAWish.gradle
 MakeAWish/local.properties
-MakeAWish/.idea/workspace.xml
-MakeAWish/.idea/libraries
+MakeAWish/.idea/*
 MakeAWish/build
 MakeAWish/captures
 MakeAWish/key
 MakeAWish/keystore.properties
-

@@ -133,9 +133,4 @@ class CalendarHelper {
         calendar.clear()
 
     }
-
-    companion object {
-        private val TAG = CalendarHelper::class.java.simpleName
-    }
-
 }

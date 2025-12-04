@@ -33,7 +33,7 @@ class App : Application() {
                 description = descriptionText
             }
             val notificationManager: android.app.NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+                getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }

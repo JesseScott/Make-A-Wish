@@ -62,10 +62,4 @@ class AlarmHelper(private val mContext: Context) {
         FirebaseAnalytics.getInstance(mContext).logEvent(mContext.getString(R.string.prefs_log_event), bundle)
 
     }
-
-    companion object {
-        private val TAG = AlarmHelper::class.java.simpleName
-    }
-
-
 }

@@ -30,9 +30,4 @@ class PreferenceHelper(private val mContext: Context) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(mContext)
         return preferences.getBoolean(key, false)
     }
-
-    companion object {
-        private val TAG = PreferenceHelper::class.java.simpleName
-    }
-
 }

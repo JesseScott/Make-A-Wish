@@ -1,5 +1,7 @@
 package tt.co.jesses.makeawish.ui.screens
 
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -16,6 +18,7 @@ class MainScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
     fun makeAWishFlow() {
         composeTestRule.setContent {
@@ -35,6 +38,7 @@ class MainScreenTest {
         composeTestRule.onNodeWithText("Save").performClick()
 
         // 5. Verify Dialog Disappears
-        composeTestRule.onNodeWithText("Make a New Wish").assertDoesNotExist()
+        // The dialog dismissal happens after a database insert in a coroutine, so we must wait.
+        composeTestRule.waitUntilDoesNotExist(hasText("Make a New Wish"), timeoutMillis = 5000)
     }
 }

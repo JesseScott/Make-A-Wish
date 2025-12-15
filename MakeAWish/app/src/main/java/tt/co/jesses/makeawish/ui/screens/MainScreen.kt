@@ -23,12 +23,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tt.co.jesses.makeawish.App
 import tt.co.jesses.makeawish.R
 import tt.co.jesses.makeawish.data.WishSource
@@ -61,7 +62,9 @@ fun MainScreen(onSettingsClick: () -> Unit) {
                                 source = WishSource.FAB.name,
                                 wish = wishText
                             )
-                            App.database.wishDao().insert(wish)
+                            withContext(Dispatchers.IO) {
+                                App.database.wishDao().insert(wish)
+                            }
                             showDialog = false
                             wishText = "" // Reset text
                         }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.provider.Settings
 import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
+import tt.co.jesses.makeawish.data.local.AppDatabase
 
 /**
  * Created by jessescott on 2017-02-27.
@@ -11,10 +12,17 @@ import com.google.firebase.analytics.FirebaseAnalytics
 
 class App : Application() {
 
+    companion object {
+        private val TAG = App::class.java.simpleName
+        lateinit var database: AppDatabase
+            private set
+    }
+
     override fun onCreate() {
         super.onCreate()
 
         Log.d(TAG, "Application Created")
+        database = AppDatabase.getDatabase(this)
 
         val firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
         firebaseAnalytics.setAnalyticsCollectionEnabled(true)
@@ -34,10 +42,6 @@ class App : Application() {
         val notificationManager: android.app.NotificationManager =
             getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
         notificationManager.createNotificationChannel(channel)
-    }
-
-    companion object {
-        private val TAG = App::class.java.simpleName
     }
 
 }

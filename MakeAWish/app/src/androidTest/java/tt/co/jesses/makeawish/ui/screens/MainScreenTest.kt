@@ -25,8 +25,8 @@ class MainScreenTest {
         // 1. Click FAB
         composeTestRule.onNodeWithContentDescription("Add").performClick()
 
-        // 2. Check if Dialog appears (title "Make a Wish")
-        composeTestRule.onNodeWithText("Make a Wish").assertExists()
+        // 2. Check if Dialog appears (title "Make a New Wish")
+        composeTestRule.onNodeWithText("Make a New Wish").assertExists()
 
         // 3. Enter Text
         composeTestRule.onNodeWithText("Enter your wish").performTextInput("I wish for 100% code coverage")
@@ -35,6 +35,6 @@ class MainScreenTest {
         composeTestRule.onNodeWithText("Save").performClick()
 
         // 5. Verify Dialog Disappears
-        composeTestRule.onNodeWithText("Make a Wish").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Make a New Wish").assertDoesNotExist()
     }
 }

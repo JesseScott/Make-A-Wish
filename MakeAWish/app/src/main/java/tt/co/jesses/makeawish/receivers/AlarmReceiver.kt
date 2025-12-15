@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import tt.co.jesses.makeawish.MainActivity
 import tt.co.jesses.makeawish.R
+import tt.co.jesses.makeawish.ui.navigation.Screen
 
 /**
  * Created by jessescott on 2017-02-22.
@@ -24,7 +25,7 @@ class AlarmReceiver : BroadcastReceiver() {
         Log.d(TAG, "Received Intent: " + intent.dataString)
 
         val notificationIntent = Intent(context, MainActivity::class.java).apply {
-            putExtra("navigation_route", "notification")
+            putExtra("navigation_route", Screen.NOTIFICATION.route)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 

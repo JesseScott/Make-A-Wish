@@ -26,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import tt.co.jesses.makeawish.helpers.AlarmHelper
+import tt.co.jesses.makeawish.ui.navigation.Screen
 import tt.co.jesses.makeawish.ui.screens.MainScreen
 import tt.co.jesses.makeawish.ui.screens.NotificationScreen
 import tt.co.jesses.makeawish.ui.screens.SettingsScreen
@@ -41,10 +42,11 @@ class MainActivity : ComponentActivity() {
         val alarmHelper = AlarmHelper(applicationContext)
         alarmHelper.setAlarms()
 
-        val startDestination = if (intent?.getStringExtra("navigation_route") == "notification") {
-            "notification"
+        val navRoute = intent?.getStringExtra("navigation_route")
+        val startDestination = if (navRoute == Screen.NOTIFICATION.route) {
+            Screen.NOTIFICATION.route
         } else {
-            "main"
+            Screen.MAIN.route
         }
 
         setContent {
@@ -68,11 +70,11 @@ fun MakeAWishApp(startDestination: String) {
 
     Scaffold(
         topBar = {
-            if (currentRoute == "main") {
+            if (currentRoute == Screen.MAIN.route) {
                 TopAppBar(
                     title = { Text(stringResource(R.string.app_name)) },
                     actions = {
-                        IconButton(onClick = { navController.navigate("settings") }) {
+                        IconButton(onClick = { navController.navigate(Screen.SETTINGS.route) }) {
                             Icon(Icons.Filled.Settings, contentDescription = "Settings")
                         }
                     },
@@ -83,8 +85,8 @@ fun MakeAWishApp(startDestination: String) {
                     title = {
                         Text(
                             when (currentRoute) {
-                                "settings" -> stringResource(R.string.settings)
-                                "notification" -> "Notification" // TODO resource
+                                Screen.SETTINGS.route -> stringResource(R.string.settings)
+                                Screen.NOTIFICATION.route -> "Notification" // TODO resource
                                 else -> ""
                             }
                         )
@@ -104,13 +106,13 @@ fun MakeAWishApp(startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("main") {
-                MainScreen(onSettingsClick = { navController.navigate("settings") })
+            composable(Screen.MAIN.route) {
+                MainScreen(onSettingsClick = { navController.navigate(Screen.SETTINGS.route) })
             }
-            composable("settings") {
+            composable(Screen.SETTINGS.route) {
                 SettingsScreen()
             }
-            composable("notification") {
+            composable(Screen.NOTIFICATION.route) {
                 NotificationScreen()
             }
         }

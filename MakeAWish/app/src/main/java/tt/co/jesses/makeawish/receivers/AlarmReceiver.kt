@@ -10,8 +10,10 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import tt.co.jesses.makeawish.NotificationActivity
+import tt.co.jesses.makeawish.MainActivity
 import tt.co.jesses.makeawish.R
+import tt.co.jesses.makeawish.ui.navigation.Screen
+import tt.co.jesses.makeawish.utils.Constants
 
 /**
  * Created by jessescott on 2017-02-22.
@@ -23,13 +25,17 @@ class AlarmReceiver : BroadcastReceiver() {
 
         Log.d(TAG, "Received Intent: " + intent.dataString)
 
-        val notificationIntent = Intent(context, NotificationActivity::class.java)
+        val notificationIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra(Constants.EXTRA_NAVIGATION_ROUTE, Screen.NOTIFICATION.route)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
-        val stackBuilder = TaskStackBuilder.create(context)
-        stackBuilder.addParentStack(NotificationActivity::class.java)
-        stackBuilder.addNextIntent(notificationIntent)
-
-        val pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val builder = NotificationCompat.Builder(context, "default")
 

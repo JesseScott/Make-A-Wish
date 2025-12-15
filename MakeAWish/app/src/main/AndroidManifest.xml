@@ -22,19 +22,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity" android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.SETTINGS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".NotificationActivity" android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.NOTIFICATIONS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <receiver android:name=".receivers.AlarmReceiver"></receiver>
 

@@ -31,6 +31,7 @@ import tt.co.jesses.makeawish.ui.screens.MainScreen
 import tt.co.jesses.makeawish.ui.screens.NotificationScreen
 import tt.co.jesses.makeawish.ui.screens.SettingsScreen
 import tt.co.jesses.makeawish.ui.theme.MakeAWishTheme
+import tt.co.jesses.makeawish.utils.Constants
 
 class MainActivity : ComponentActivity() {
 
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
         val alarmHelper = AlarmHelper(applicationContext)
         alarmHelper.setAlarms()
 
-        val navRoute = intent?.getStringExtra("navigation_route")
+        val navRoute = intent?.getStringExtra(Constants.EXTRA_NAVIGATION_ROUTE)
         val startDestination = if (navRoute == Screen.NOTIFICATION.route) {
             Screen.NOTIFICATION.route
         } else {

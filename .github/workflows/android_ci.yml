@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [29]
+        target: [default]
 
     steps:
     - uses: actions/checkout@v3
@@ -27,3 +31,11 @@ jobs:
 
     - name: Run unit tests
       run: cd MakeAWish && ./gradlew testDebugUnitTest
+
+    - name: Run instrumented tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: ${{ matrix.target }}
+        arch: x86_64
+        script: cd MakeAWish && ./gradlew connectedCheck

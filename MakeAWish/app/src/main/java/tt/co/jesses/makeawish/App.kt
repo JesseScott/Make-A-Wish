@@ -1,8 +1,10 @@
 package tt.co.jesses.makeawish
 
+import android.Manifest
 import android.app.Application
 import android.provider.Settings
 import android.util.Log
+import androidx.annotation.RequiresPermission
 import com.google.firebase.analytics.FirebaseAnalytics
 import tt.co.jesses.makeawish.data.local.AppDatabase
 
@@ -18,6 +20,7 @@ class App : Application() {
             private set
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WAKE_LOCK])
     override fun onCreate() {
         super.onCreate()
 

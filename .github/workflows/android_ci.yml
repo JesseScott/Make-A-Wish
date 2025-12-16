@@ -33,7 +33,7 @@ jobs:
       run: cd MakeAWish && ./gradlew testDebugUnitTest
 
     - name: Run instrumented tests
-      uses: reactivecircus/android-emulator-runner@v3
+      uses: reactivecircus/android-emulator-runner@v2.35.0
       with:
         api-level: ${{ matrix.api-level }}
         target: ${{ matrix.target }}

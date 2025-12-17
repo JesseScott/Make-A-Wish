@@ -32,4 +32,6 @@
     <string name="dialog_btn_save">Save</string>
     <string name="dialog_btn_cancel">Cancel</string>
 
+    <string name="cd_add_wish">Add a new wish</string>
+
 </resources>

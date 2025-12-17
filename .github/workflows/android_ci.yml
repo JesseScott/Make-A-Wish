@@ -38,4 +38,5 @@ jobs:
         api-level: ${{ matrix.api-level }}
         target: ${{ matrix.target }}
         arch: x86_64
+        disable-animations: true
         script: cd MakeAWish && ./gradlew connectedCheck

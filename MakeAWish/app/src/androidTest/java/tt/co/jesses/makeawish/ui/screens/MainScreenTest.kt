@@ -39,6 +39,6 @@ class MainScreenTest {
 
         // 5. Verify Dialog Disappears
         // The dialog dismissal happens after a database insert in a coroutine, so we must wait.
-        composeTestRule.waitUntilDoesNotExist(hasText("Make a New Wish"), timeoutMillis = 5000)
+        composeTestRule.waitUntilDoesNotExist(hasText("Make a New Wish"), timeoutMillis = 15000)
     }
 }

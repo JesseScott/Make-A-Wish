@@ -26,7 +26,7 @@ class MainScreenTest {
         }
 
         // 1. Click FAB
-        composeTestRule.onNodeWithContentDescription("Add").performClick()
+        composeTestRule.onNodeWithContentDescription("Add a wish").performClick()
 
         // 2. Check if Dialog appears (title "Make a New Wish")
         composeTestRule.onNodeWithText("Make a New Wish").assertExists()

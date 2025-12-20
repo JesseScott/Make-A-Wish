@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
@@ -22,8 +24,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +44,25 @@ fun MainScreen(onSettingsClick: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     var wishText by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    val haptic = LocalHapticFeedback.current
+
     // In a real app we might inject the DB or DAO, but adhering to the current pattern:
+
+    val saveWish: () -> Unit = {
+        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        coroutineScope.launch {
+            val wish = Wish(
+                timestamp = System.currentTimeMillis().toString(),
+                source = WishSource.FAB.name,
+                wish = wishText
+            )
+            withContext(Dispatchers.IO) {
+                App.database.wishDao().insert(wish)
+            }
+            showDialog = false
+            wishText = "" // Reset text
+        }
+    }
 
     if (showDialog) {
         AlertDialog(
@@ -49,25 +72,16 @@ fun MainScreen(onSettingsClick: () -> Unit) {
                 TextField(
                     value = wishText,
                     onValueChange = { wishText = it },
-                    label = { Text(stringResource(R.string.dialog_label_enter_wish)) }
+                    label = { Text(stringResource(R.string.dialog_label_enter_wish)) },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { saveWish() }
+                    )
                 )
             },
             confirmButton = {
                 Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            val wish = Wish(
-                                timestamp = System.currentTimeMillis().toString(),
-                                source = WishSource.FAB.name,
-                                wish = wishText
-                            )
-                            withContext(Dispatchers.IO) {
-                                App.database.wishDao().insert(wish)
-                            }
-                            showDialog = false
-                            wishText = "" // Reset text
-                        }
-                    }
+                    onClick = { saveWish() }
                 ) {
                     Text(stringResource(R.string.dialog_btn_save))
                 }
@@ -86,7 +100,7 @@ fun MainScreen(onSettingsClick: () -> Unit) {
                 onClick = { showDialog = true },
                 containerColor = MaterialTheme.colorScheme.secondary
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.cd_add_wish))
             }
         }
     ) { innerPadding ->

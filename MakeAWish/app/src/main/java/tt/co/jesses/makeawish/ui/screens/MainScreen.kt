@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
@@ -15,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,11 +25,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tt.co.jesses.makeawish.App
@@ -39,36 +49,56 @@ fun MainScreen(onSettingsClick: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     var wishText by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    // In a real app we might inject the DB or DAO, but adhering to the current pattern:
+    val hapticFeedback = LocalHapticFeedback.current
 
     if (showDialog) {
+        val focusRequester = remember { FocusRequester() }
+
+        val saveWish = {
+            if (wishText.isNotBlank()) {
+                coroutineScope.launch {
+                    val wish = Wish(
+                        timestamp = System.currentTimeMillis().toString(),
+                        source = WishSource.FAB.name,
+                        wish = wishText
+                    )
+                    withContext(Dispatchers.IO) {
+                        App.database.wishDao().insert(wish)
+                    }
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    showDialog = false
+                    wishText = "" // Reset text
+                }
+            }
+        }
+
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text(stringResource(R.string.dialog_title_make_wish)) },
             text = {
+                // Request focus when the dialog appears
+                LaunchedEffect(Unit) {
+                    delay(100) // Slight delay to ensure dialog is ready
+                    focusRequester.requestFocus()
+                }
+
                 TextField(
                     value = wishText,
                     onValueChange = { wishText = it },
-                    label = { Text(stringResource(R.string.dialog_label_enter_wish)) }
+                    label = { Text(stringResource(R.string.dialog_label_enter_wish)) },
+                    modifier = Modifier.focusRequester(focusRequester),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { saveWish() }
+                    ),
+                    singleLine = true
                 )
             },
             confirmButton = {
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            val wish = Wish(
-                                timestamp = System.currentTimeMillis().toString(),
-                                source = WishSource.FAB.name,
-                                wish = wishText
-                            )
-                            withContext(Dispatchers.IO) {
-                                App.database.wishDao().insert(wish)
-                            }
-                            showDialog = false
-                            wishText = "" // Reset text
-                        }
-                    }
-                ) {
+                Button(onClick = { saveWish() }) {
                     Text(stringResource(R.string.dialog_btn_save))
                 }
             },
@@ -86,7 +116,10 @@ fun MainScreen(onSettingsClick: () -> Unit) {
                 onClick = { showDialog = true },
                 containerColor = MaterialTheme.colorScheme.secondary
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = stringResource(R.string.cd_add_wish)
+                )
             }
         }
     ) { innerPadding ->

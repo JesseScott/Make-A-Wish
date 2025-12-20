@@ -1,8 +1,6 @@
 package tt.co.jesses.makeawish.ui.screens
 
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -11,34 +9,38 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import tt.co.jesses.makeawish.MainActivity
+import tt.co.jesses.makeawish.R
 
 @RunWith(AndroidJUnit4::class)
 class MainScreenTest {
 
-    @get:Rule
-    val composeTestRule = createComposeRule()
+    @Rule
+    @JvmField
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    @OptIn(ExperimentalTestApi::class)
     @Test
-    fun makeAWishFlow() {
-        composeTestRule.setContent {
-            MainScreen(onSettingsClick = {})
-        }
+    fun testAddWishDialogOpensAndContentDescriptionIsCorrect() {
+        // Click the FAB using the new localized content description
+        composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.cd_add_wish)).performClick()
 
-        // 1. Click FAB
-        composeTestRule.onNodeWithContentDescription("Add").performClick()
+        // Verify the dialog title exists
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.dialog_title_make_wish)).assertExists()
+    }
 
-        // 2. Check if Dialog appears (title "Make a New Wish")
-        composeTestRule.onNodeWithText("Make a New Wish").assertExists()
+    @Test
+    fun testEnterWishAndSave() {
+        val input = "My wish"
+        // Open Dialog
+        composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.cd_add_wish)).performClick()
 
-        // 3. Enter Text
-        composeTestRule.onNodeWithText("Enter your wish").performTextInput("I wish for 100% code coverage")
+        // Enter text
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.dialog_label_enter_wish)).performTextInput(input)
 
-        // 4. Click Save
-        composeTestRule.onNodeWithText("Save").performClick()
+        // Perform save and close dialog
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.dialog_btn_save)).performClick()
 
-        // 5. Verify Dialog Disappears
-        // The dialog dismissal happens after a database insert in a coroutine, so we must wait.
-        composeTestRule.waitUntilDoesNotExist(hasText("Make a New Wish"), timeoutMillis = 5000)
+        // Verify dialog is closed (Title no longer exists)
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.dialog_title_make_wish)).assertDoesNotExist()
     }
 }

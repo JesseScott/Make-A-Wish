@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.devtools.ksp'
-apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
 android {
     namespace "tt.co.jesses.makeawish"
@@ -80,11 +79,4 @@ dependencies {
     androidTestImplementation 'tools.fastlane:screengrab:2.1.1'
     testImplementation 'junit:junit:4.13.2'
 
-}
-
-ktlint {
-    android = true
-    reporters {
-        reporter "plain"
-    }
 }

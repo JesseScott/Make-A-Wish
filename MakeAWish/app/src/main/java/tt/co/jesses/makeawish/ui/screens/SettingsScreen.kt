@@ -1,6 +1,5 @@
 package tt.co.jesses.makeawish.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,25 +33,25 @@ fun SettingsScreen() {
             title = stringResource(R.string.settings_enable_notifications),
             key = stringResource(R.string.prefs_enable_notifications),
             defaultValue = true,
-            preferenceHelper = preferenceHelper
+            preferenceHelper = preferenceHelper,
         )
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_daytime_alarms),
             key = stringResource(R.string.prefs_enable_daytime_alarms),
             defaultValue = true,
-            preferenceHelper = preferenceHelper
+            preferenceHelper = preferenceHelper,
         )
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_nighttime_alarms),
             key = stringResource(R.string.prefs_enable_nighttime_alarms),
             defaultValue = false,
-            preferenceHelper = preferenceHelper
+            preferenceHelper = preferenceHelper,
         )
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_analytics),
             key = stringResource(R.string.prefs_enable_analytics),
             defaultValue = true,
-            preferenceHelper = preferenceHelper
+            preferenceHelper = preferenceHelper,
         )
     }
 }
@@ -62,7 +61,7 @@ fun SettingsCheckbox(
     title: String,
     key: String,
     defaultValue: Boolean,
-    preferenceHelper: PreferenceHelper
+    preferenceHelper: PreferenceHelper,
 ) {
     var checked by remember {
         mutableStateOf(
@@ -70,7 +69,7 @@ fun SettingsCheckbox(
                 preferenceHelper.getPrefValueByKey(key)
             } catch (e: Exception) {
                 defaultValue
-            }
+            },
         )
     }
 
@@ -89,19 +88,19 @@ fun SettingsCheckbox(
                     checked = it
                     preferenceHelper.setPrefValueByKey(key, it)
                 },
-                role = Role.Checkbox
+                role = Role.Checkbox,
             )
             .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
             checked = checked,
-            onCheckedChange = null // null recommended for accessibility with toggleable modifier
+            onCheckedChange = null,
         )
         Text(
             text = title,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 16.dp)
+            modifier = Modifier.padding(start = 16.dp),
         )
     }
 }

@@ -15,40 +15,43 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = BlueGrey500,
-    secondary = Amber500,
-    tertiary = BlueGrey700
-)
+private val DarkColorScheme =
+    darkColorScheme(
+        primary = BlueGrey500,
+        secondary = Amber500,
+        tertiary = BlueGrey700,
+    )
 
-private val LightColorScheme = lightColorScheme(
-    primary = BlueGrey500,
-    secondary = Amber500,
-    tertiary = BlueGrey700,
-    background = Icons,
-    surface = Icons,
-    onPrimary = Icons,
-    onSecondary = PrimaryText,
-    onTertiary = Icons,
-    onBackground = PrimaryText,
-    onSurface = PrimaryText,
-)
+private val LightColorScheme =
+    lightColorScheme(
+        primary = BlueGrey500,
+        secondary = Amber500,
+        tertiary = BlueGrey700,
+        background = Icons,
+        surface = Icons,
+        onPrimary = Icons,
+        onSecondary = PrimaryText,
+        onTertiary = Icons,
+        onBackground = PrimaryText,
+        onSurface = PrimaryText,
+    )
 
 @Composable
 fun MakeAWishTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    val colorScheme =
+        when {
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                val context = LocalContext.current
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            }
+            darkTheme -> DarkColorScheme
+            else -> LightColorScheme
         }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -61,6 +64,6 @@ fun MakeAWishTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

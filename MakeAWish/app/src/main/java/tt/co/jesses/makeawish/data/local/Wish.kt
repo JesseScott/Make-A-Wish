@@ -9,5 +9,5 @@ data class Wish(
     val id: Int = 0,
     val timestamp: String,
     val source: String,
-    val wish: String
+    val wish: String,
 )

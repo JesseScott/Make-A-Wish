@@ -15,7 +15,7 @@ import tt.co.jesses.makeawish.R
 fun NotificationScreen() {
     Box(
         modifier = Modifier.fillMaxSize().padding(16.dp),
-        contentAlignment = Alignment.TopStart,
+        contentAlignment = Alignment.TopStart
     ) {
         Text(text = stringResource(R.string.notification_placeholder))
     }

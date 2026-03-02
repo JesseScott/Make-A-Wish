@@ -34,24 +34,22 @@ import tt.co.jesses.makeawish.ui.theme.MakeAWishTheme
 import tt.co.jesses.makeawish.utils.Constants
 
 class MainActivity : ComponentActivity() {
+
     @RequiresPermission(allOf = [Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WAKE_LOCK])
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        FirebaseAnalytics.getInstance(
-            this.applicationContext,
-        ).setCurrentScreen(this@MainActivity, "MainActivity", MainActivity::class.java.simpleName)
+        FirebaseAnalytics.getInstance(this.applicationContext).setCurrentScreen(this@MainActivity, "MainActivity", MainActivity::class.java.simpleName)
 
         val alarmHelper = AlarmHelper(applicationContext)
         alarmHelper.setAlarms()
 
         val navRoute = intent?.getStringExtra(Constants.EXTRA_NAVIGATION_ROUTE)
-        val startDestination =
-            if (navRoute == Screen.NOTIFICATION.route) {
-                Screen.NOTIFICATION.route
-            } else {
-                Screen.MAIN.route
-            }
+        val startDestination = if (navRoute == Screen.NOTIFICATION.route) {
+            Screen.NOTIFICATION.route
+        } else {
+            Screen.MAIN.route
+        }
 
         setContent {
             MakeAWishTheme {
@@ -82,7 +80,7 @@ fun MakeAWishApp(startDestination: String) {
                             Icon(Icons.Filled.Settings, contentDescription = "Settings")
                         }
                     },
-                    colors = TopAppBarDefaults.topAppBarColors(),
+                    colors = TopAppBarDefaults.topAppBarColors()
                 )
             } else {
                 TopAppBar(
@@ -92,7 +90,7 @@ fun MakeAWishApp(startDestination: String) {
                                 Screen.SETTINGS.route -> stringResource(R.string.settings)
                                 Screen.NOTIFICATION.route -> "Notification" // TODO resource
                                 else -> ""
-                            },
+                            }
                         )
                     },
                     navigationIcon = {
@@ -100,15 +98,15 @@ fun MakeAWishApp(startDestination: String) {
                             Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                         }
                     },
-                    colors = TopAppBarDefaults.topAppBarColors(),
+                    colors = TopAppBarDefaults.topAppBarColors()
                 )
             }
-        },
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.MAIN.route) {
                 MainScreen(onSettingsClick = { navController.navigate(Screen.SETTINGS.route) })

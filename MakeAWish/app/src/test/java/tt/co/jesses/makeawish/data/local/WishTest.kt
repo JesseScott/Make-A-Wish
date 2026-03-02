@@ -5,7 +5,6 @@ import org.junit.Test
 import tt.co.jesses.makeawish.data.WishSource
 
 class WishTest {
-
     @Test
     fun testWishCreation() {
         val timestamp = "1234567890"
@@ -16,7 +15,7 @@ class WishTest {
             id = 1,
             timestamp = timestamp,
             source = source,
-            wish = wishText
+            wish = wishText,
         )
 
         assertEquals(1, wish.id)
@@ -30,7 +29,7 @@ class WishTest {
         val wish = Wish(
             timestamp = "123",
             source = "test",
-            wish = "test wish"
+            wish = "test wish",
         )
         assertEquals(0, wish.id)
     }

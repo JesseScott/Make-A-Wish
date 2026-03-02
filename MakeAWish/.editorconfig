@@ -1,0 +1,10 @@
+root = true
+
+[*.{kt,kts}]
+ktlint_code_style = ktlint_official
+indent_size = 4
+insert_final_newline = true
+max_line_length = 140
+# Disable function naming rule for Compose
+ktlint_standard_function-naming = disabled
+ktlint_standard_property-naming = disabled

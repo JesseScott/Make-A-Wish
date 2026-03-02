@@ -1,14 +1,12 @@
 package tt.co.jesses.makeawish.helpers
 
-import java.util.*
+import java.util.Calendar
 
 /**
  * Created by jessescott on 2017-02-27.
  */
 
 class CalendarHelper {
-
-
     val calendarsNighttime = arrayOfNulls<Calendar>(8)
     // AM - 10:10, 11:11, 12:12, 1:11, 2:22, 3:33, 4:44, 5:55
     // Getters
@@ -21,11 +19,9 @@ class CalendarHelper {
         setCalendarsNighttime()
     }
 
-
     // Setters
 
     private fun setCalendarsNighttime() {
-
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
 
@@ -76,11 +72,9 @@ class CalendarHelper {
         calendar.set(Calendar.MINUTE, 55)
         calendarsNighttime[7] = calendar
         calendar.clear()
-
     }
 
     private fun setCalendarsDaytime() {
-
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
 
@@ -131,6 +125,5 @@ class CalendarHelper {
         calendar.set(Calendar.MINUTE, 55)
         calendarsDaytime[7] = calendar
         calendar.clear()
-
     }
 }

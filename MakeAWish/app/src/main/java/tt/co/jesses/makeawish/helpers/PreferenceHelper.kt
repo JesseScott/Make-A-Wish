@@ -1,6 +1,5 @@
 package tt.co.jesses.makeawish.helpers
 
-
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
@@ -13,7 +12,6 @@ import tt.co.jesses.makeawish.R
  */
 
 class PreferenceHelper(private val mContext: Context) {
-
     companion object {
         @Volatile
         private var encryptedPrefs: SharedPreferences? = null
@@ -32,20 +30,24 @@ class PreferenceHelper(private val mContext: Context) {
         }
 
         private fun createEncryptedSharedPreferences(context: Context): SharedPreferences {
-            val masterKey = MasterKey.Builder(context)
-                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                .build()
+            val masterKey =
+                MasterKey.Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build()
 
             return EncryptedSharedPreferences.create(
                 context,
                 "secret_shared_prefs",
                 masterKey,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
             )
         }
 
-        private fun migrateToEncrypted(context: Context, encryptedPrefs: SharedPreferences) {
+        private fun migrateToEncrypted(
+            context: Context,
+            encryptedPrefs: SharedPreferences,
+        ) {
             val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
             // Check if we need to migrate: Default prefs has content, Encrypted is empty
             if (defaultPrefs.all.isNotEmpty() && encryptedPrefs.all.isEmpty()) {
@@ -58,8 +60,8 @@ class PreferenceHelper(private val mContext: Context) {
                         is Float -> editor.putFloat(key, value)
                         is Long -> editor.putLong(key, value)
                         is Set<*> -> {
-                             @Suppress("UNCHECKED_CAST")
-                             editor.putStringSet(key, value as Set<String>)
+                            @Suppress("UNCHECKED_CAST")
+                            editor.putStringSet(key, value as Set<String>)
                         }
                     }
                 }
@@ -69,13 +71,18 @@ class PreferenceHelper(private val mContext: Context) {
         }
     }
 
-    fun setPrefValueByKey(key: String, value: Boolean) {
+    fun setPrefValueByKey(
+        key: String,
+        value: Boolean,
+    ) {
         val preferences = getEncryptedSharedPreferences(mContext)
         val editor = preferences.edit()
         editor.putBoolean(key, value)
         editor.apply()
 
-        if (key == mContext.getString(R.string.prefs_enable_daytime_alarms) || key == mContext.getString(R.string.prefs_enable_nighttime_alarms)) {
+        if (key == mContext.getString(R.string.prefs_enable_daytime_alarms) ||
+            key == mContext.getString(R.string.prefs_enable_nighttime_alarms)
+        ) {
             triggerAlarmRegeneration()
         }
     }

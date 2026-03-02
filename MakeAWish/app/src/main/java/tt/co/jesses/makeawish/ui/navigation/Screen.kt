@@ -5,7 +5,8 @@ import java.io.Serializable
 enum class Screen(val route: String) : Serializable {
     MAIN("main"),
     SETTINGS("settings"),
-    NOTIFICATION("notification");
+    NOTIFICATION("notification"),
+    ;
 
     companion object {
         fun fromRoute(route: String?): Screen? {

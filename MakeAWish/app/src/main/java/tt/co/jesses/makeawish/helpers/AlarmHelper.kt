@@ -19,7 +19,6 @@ class AlarmHelper(private val mContext: Context) {
     private val mAlarmIntent: PendingIntent
     private val mAlarmManager: AlarmManager
 
-
     init {
         val intent = Intent(mContext, AlarmReceiver::class.java)
         mAlarmIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
@@ -60,6 +59,5 @@ class AlarmHelper(private val mContext: Context) {
         bundle.putBoolean(mContext.getString(R.string.prefs_enable_nighttime_alarms), nighttimeEnabled)
         bundle.putBoolean(mContext.getString(R.string.prefs_nighttime_set), nighttimeSet)
         FirebaseAnalytics.getInstance(mContext).logEvent(mContext.getString(R.string.prefs_log_event), bundle)
-
     }
 }

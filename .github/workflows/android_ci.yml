@@ -26,6 +26,9 @@ jobs:
     - name: Grant execute permission to gradlew
       run: chmod +x MakeAWish/gradlew
 
+    - name: Run ktlint check
+      run: cd MakeAWish && ./gradlew ktlintCheck
+
     - name: Build debug APK
       run: cd MakeAWish && ./gradlew assembleDebug
 

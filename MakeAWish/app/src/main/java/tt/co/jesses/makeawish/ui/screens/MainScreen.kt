@@ -49,25 +49,26 @@ fun MainScreen(onSettingsClick: () -> Unit) {
                 TextField(
                     value = wishText,
                     onValueChange = { wishText = it },
-                    label = { Text(stringResource(R.string.dialog_label_enter_wish)) }
+                    label = { Text(stringResource(R.string.dialog_label_enter_wish)) },
                 )
             },
             confirmButton = {
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            val wish = Wish(
-                                timestamp = System.currentTimeMillis().toString(),
-                                source = WishSource.FAB.name,
-                                wish = wishText
-                            )
+                            val wish =
+                                Wish(
+                                    timestamp = System.currentTimeMillis().toString(),
+                                    source = WishSource.FAB.name,
+                                    wish = wishText,
+                                )
                             withContext(Dispatchers.IO) {
                                 App.database.wishDao().insert(wish)
                             }
                             showDialog = false
                             wishText = "" // Reset text
                         }
-                    }
+                    },
                 ) {
                     Text(stringResource(R.string.dialog_btn_save))
                 }
@@ -76,7 +77,7 @@ fun MainScreen(onSettingsClick: () -> Unit) {
                 Button(onClick = { showDialog = false }) {
                     Text(stringResource(R.string.dialog_btn_cancel))
                 }
-            }
+            },
         )
     }
 
@@ -84,11 +85,11 @@ fun MainScreen(onSettingsClick: () -> Unit) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showDialog = true },
-                containerColor = MaterialTheme.colorScheme.secondary
+                containerColor = MaterialTheme.colorScheme.secondary,
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
             }
-        }
+        },
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
             Text(
@@ -96,10 +97,11 @@ fun MainScreen(onSettingsClick: () -> Unit) {
                 style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .align(Alignment.TopCenter)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                        .align(Alignment.TopCenter),
             )
 
             // Placeholder for RecyclerView

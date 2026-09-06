@@ -35,7 +35,7 @@ import tt.co.jesses.makeawish.data.WishSource
 import tt.co.jesses.makeawish.data.local.Wish
 
 @Composable
-fun MainScreen(onSettingsClick: () -> Unit) {
+fun MainScreen() {
     var showDialog by remember { mutableStateOf(false) }
     var wishText by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()

@@ -1,6 +1,6 @@
 package tt.co.jesses.makeawish.ui.screens
 
-import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -69,6 +69,7 @@ fun SettingsCheckbox(
             try {
                 preferenceHelper.getPrefValueByKey(key)
             } catch (e: Exception) {
+                Log.d("SettingsScreen", "Error getting preference: $e")
                 defaultValue
             }
         )

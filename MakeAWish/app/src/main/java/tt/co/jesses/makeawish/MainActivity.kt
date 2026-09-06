@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import tt.co.jesses.makeawish.helpers.AlarmHelper
+import androidx.activity.enableEdgeToEdge
 import tt.co.jesses.makeawish.ui.navigation.Screen
 import tt.co.jesses.makeawish.ui.screens.MainScreen
 import tt.co.jesses.makeawish.ui.screens.NotificationScreen
@@ -37,9 +38,14 @@ class MainActivity : ComponentActivity() {
 
     @RequiresPermission(allOf = [Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WAKE_LOCK])
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        FirebaseAnalytics.getInstance(this.applicationContext).setCurrentScreen(this@MainActivity, "MainActivity", MainActivity::class.java.simpleName)
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, MainActivity::class.java.simpleName)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, MainActivity::class.java.simpleName)
+        }
+        FirebaseAnalytics.getInstance(this.applicationContext).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
 
         val alarmHelper = AlarmHelper(applicationContext)
         alarmHelper.setAlarms()
@@ -56,10 +62,6 @@ class MainActivity : ComponentActivity() {
                 MakeAWishApp(startDestination = startDestination)
             }
         }
-    }
-
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
     }
 }
 
@@ -95,7 +97,7 @@ fun MakeAWishApp(startDestination: String) {
                     },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors()
@@ -109,7 +111,7 @@ fun MakeAWishApp(startDestination: String) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.MAIN.route) {
-                MainScreen(onSettingsClick = { navController.navigate(Screen.SETTINGS.route) })
+                MainScreen()
             }
             composable(Screen.SETTINGS.route) {
                 SettingsScreen()

@@ -22,7 +22,7 @@ class MainScreenTest {
     @Test
     fun makeAWishFlow() {
         composeTestRule.setContent {
-            MainScreen(onSettingsClick = {})
+            MainScreen()
         }
 
         // 1. Click FAB

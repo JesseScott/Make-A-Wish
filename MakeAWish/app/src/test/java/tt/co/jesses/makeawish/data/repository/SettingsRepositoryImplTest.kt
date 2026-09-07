@@ -6,7 +6,7 @@ import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import tt.co.jesses.makeawish.domain.helpers.AlarmHelper
+import tt.co.jesses.makeawish.helpers.AlarmHelper
 import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import android.content.Context
 import tt.co.jesses.makeawish.R

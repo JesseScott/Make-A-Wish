@@ -24,7 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.analytics.FirebaseAnalytics
-import tt.co.jesses.makeawish.domain.helpers.AlarmHelper
+import tt.co.jesses.makeawish.helpers.AlarmHelper
 import androidx.activity.enableEdgeToEdge
 import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import tt.co.jesses.makeawish.ui.navigation.Screen

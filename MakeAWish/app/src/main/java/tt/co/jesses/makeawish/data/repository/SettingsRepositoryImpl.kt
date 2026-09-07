@@ -4,7 +4,7 @@ import android.content.Context
 import tt.co.jesses.makeawish.R
 import tt.co.jesses.makeawish.domain.repository.SettingsRepository
 import tt.co.jesses.makeawish.helpers.PreferenceHelper
-import tt.co.jesses.makeawish.domain.helpers.AlarmHelper
+import tt.co.jesses.makeawish.helpers.AlarmHelper
 
 class SettingsRepositoryImpl(
     private val context: Context,

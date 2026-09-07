@@ -37,6 +37,7 @@ fun SettingsScreen(
     val nighttimeEnabled by viewModel.nighttimeEnabled.collectAsState()
     val cutoffIndex by viewModel.cutoffIndex.collectAsState()
     val analyticsEnabled by viewModel.analyticsEnabled.collectAsState()
+    val daytimeEnabled by viewModel.daytimeEnabled.collectAsState()
 
     Column(
         modifier = Modifier
@@ -45,14 +46,12 @@ fun SettingsScreen(
     ) {
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_daytime_alarms),
-            key = R.string.prefs_enable_daytime_alarms.toString(),
-            defaultValue = true,
+            checked = daytimeEnabled,
             onCheckedChange = { viewModel.setDaytimeEnabled(it) }
         )
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_nighttime_alarms),
-            key = R.string.prefs_enable_nighttime_alarms.toString(),
-            defaultValue = false,
+            checked = nighttimeEnabled,
             onCheckedChange = { viewModel.setNighttimeEnabled(it) }
         )
 
@@ -72,8 +71,7 @@ fun SettingsScreen(
 
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_analytics),
-            key = R.string.prefs_enable_analytics.toString(),
-            defaultValue = true,
+            checked = analyticsEnabled,
             onCheckedChange = { viewModel.setAnalyticsEnabled(it) }
         )
 
@@ -100,23 +98,15 @@ fun SettingsScreen(
 @Composable
 fun SettingsCheckbox(
     title: String,
-    key: String,
-    defaultValue: Boolean,
-    onCheckedChange: ((Boolean) -> Unit)? = null
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
-    var checked by remember {
-        mutableStateOf(defaultValue)
-    }
-
     Row(
         Modifier
             .fillMaxWidth()
             .toggleable(
                 value = checked,
-                onValueChange = { newValue ->
-                    checked = newValue
-                    onCheckedChange?.invoke(newValue)
-                },
+                onValueChange = onCheckedChange,
                 role = Role.Checkbox
             )
             .padding(vertical = 8.dp),

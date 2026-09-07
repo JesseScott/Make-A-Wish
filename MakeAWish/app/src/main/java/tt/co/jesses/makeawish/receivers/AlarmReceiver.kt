@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import tt.co.jesses.makeawish.MainActivity
 import tt.co.jesses.makeawish.R
-import tt.co.jesses.makeawish.helpers.AlarmHelper
+import tt.co.jesses.makeawish.domain.helpers.AlarmHelper
 import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import tt.co.jesses.makeawish.ui.navigation.Screen
 import tt.co.jesses.makeawish.utils.Constants

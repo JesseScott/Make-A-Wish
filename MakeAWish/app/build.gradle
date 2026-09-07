@@ -71,6 +71,10 @@ dependencies {
     implementation "androidx.room:room-ktx:2.8.4"
     ksp "androidx.room:room-compiler:2.8.4"
 
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.6"
+
     // Tests
     androidTestImplementation('androidx.test.espresso:espresso-core:3.7.0', {
         exclude group: 'com.android.support', module: 'support-annotations'

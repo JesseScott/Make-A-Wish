@@ -11,6 +11,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import tt.co.jesses.makeawish.MainActivity
 import tt.co.jesses.makeawish.R
+import tt.co.jesses.makeawish.helpers.AlarmHelper
+import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import tt.co.jesses.makeawish.ui.navigation.Screen
 import tt.co.jesses.makeawish.utils.Constants
 
@@ -61,6 +63,11 @@ class AlarmReceiver : BroadcastReceiver() {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notification)
 
+        // Re-arm exact alarms for the next day
+        val preferenceHelper = PreferenceHelper(context)
+        preferenceHelper.setPrefValueByKey(context.getString(R.string.prefs_daytime_set), false)
+        preferenceHelper.setPrefValueByKey(context.getString(R.string.prefs_nighttime_set), false)
+        AlarmHelper(context).setAlarms()
     }
 
     companion object {

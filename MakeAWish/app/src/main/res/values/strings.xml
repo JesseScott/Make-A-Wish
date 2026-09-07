@@ -21,6 +21,8 @@
 
     <string name="prefs_daytime_set">prefs_daytime_set</string>
     <string name="prefs_nighttime_set">prefs_nighttime_set</string>
+    <string name="prefs_onboarding_completed">prefs_onboarding_completed</string>
+    <string name="prefs_evening_cutoff_index">prefs_evening_cutoff_index</string>
 
     <string name="prefs_log_event">prefs_log_event</string>
 
@@ -31,5 +33,21 @@
     <string name="dialog_label_enter_wish">Enter your wish</string>
     <string name="dialog_btn_save">Save</string>
     <string name="dialog_btn_cancel">Cancel</string>
+
+    <!-- Onboarding & Bedtime Cutoff Strings -->
+    <string name="onboarding_welcome_title">Welcome to Make a Wish</string>
+    <string name="onboarding_welcome_desc">Catch magical moments throughout the day when repeating angel numbers appear (11:11, 2:22, 3:33). Take a pause, set your intentions, and make a wish!</string>
+    <string name="onboarding_daytime_title">Daytime Reminders</string>
+    <string name="onboarding_daytime_desc">Receive subtle wish prompts during daytime angel hours (10:10 AM – 5:55 PM).</string>
+    <string name="onboarding_evening_title">Evening &amp; Bedtime Cutoff</string>
+    <string name="onboarding_evening_desc">Set your evening bedtime cutoff so notifications pause while you sleep.</string>
+    <string name="onboarding_permissions_title">Stay Connected</string>
+    <string name="onboarding_permissions_desc">Enable notifications so you never miss an angel wish moment!</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_get_started">Get Started</string>
+    <string name="btn_grant_permission">Enable Notifications</string>
+    <string name="bedtime_cutoff_label">Bedtime Cutoff Time</string>
+    <string name="bedtime_cutoff_subtitle">Reminders active until: %1$s</string>
+    <string name="bedtime_sleep_hours">Sleep Hours (Reminders Paused)</string>
 
 </resources>

@@ -27,9 +27,11 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import tt.co.jesses.makeawish.helpers.AlarmHelper
 import androidx.activity.enableEdgeToEdge
+import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import tt.co.jesses.makeawish.ui.navigation.Screen
 import tt.co.jesses.makeawish.ui.screens.MainScreen
 import tt.co.jesses.makeawish.ui.screens.NotificationScreen
+import tt.co.jesses.makeawish.ui.screens.OnboardingScreen
 import tt.co.jesses.makeawish.ui.screens.SettingsScreen
 import tt.co.jesses.makeawish.ui.theme.MakeAWishTheme
 import tt.co.jesses.makeawish.utils.Constants
@@ -50,11 +52,14 @@ class MainActivity : ComponentActivity() {
         val alarmHelper = AlarmHelper(applicationContext)
         alarmHelper.setAlarms()
 
+        val preferenceHelper = PreferenceHelper(this)
+        val onboardingCompleted = preferenceHelper.getPrefValueByKey(getString(R.string.prefs_onboarding_completed))
+
         val navRoute = intent?.getStringExtra(Constants.EXTRA_NAVIGATION_ROUTE)
-        val startDestination = if (navRoute == Screen.NOTIFICATION.route) {
-            Screen.NOTIFICATION.route
-        } else {
-            Screen.MAIN.route
+        val startDestination = when {
+            navRoute == Screen.NOTIFICATION.route -> Screen.NOTIFICATION.route
+            !onboardingCompleted -> Screen.ONBOARDING.route
+            else -> Screen.MAIN.route
         }
 
         setContent {
@@ -74,7 +79,9 @@ fun MakeAWishApp(startDestination: String) {
 
     Scaffold(
         topBar = {
-            if (currentRoute == Screen.MAIN.route) {
+            if (currentRoute == Screen.ONBOARDING.route) {
+                // Hide top bar during onboarding
+            } else if (currentRoute == Screen.MAIN.route) {
                 TopAppBar(
                     title = { Text(stringResource(R.string.app_name)) },
                     actions = {
@@ -110,6 +117,15 @@ fun MakeAWishApp(startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.ONBOARDING.route) {
+                OnboardingScreen(
+                    onFinishOnboarding = {
+                        navController.navigate(Screen.MAIN.route) {
+                            popUpTo(Screen.ONBOARDING.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(Screen.MAIN.route) {
                 MainScreen()
             }

@@ -81,6 +81,21 @@ class PreferenceHelper(private val mContext: Context) {
         }
     }
 
+    fun setIntPrefValueByKey(key: String, value: Int) {
+        val preferences = getEncryptedSharedPreferences(mContext)
+        preferences.edit {
+            putInt(key, value)
+        }
+
+        if (key == mContext.getString(R.string.prefs_evening_cutoff_index)) {
+            // Reset nighttime set flag so alarms regenerate with the new cutoff
+            preferences.edit {
+                putBoolean(mContext.getString(R.string.prefs_nighttime_set), false)
+            }
+            triggerAlarmRegeneration()
+        }
+    }
+
     private fun triggerAlarmRegeneration() {
         val alarmHelper = AlarmHelper(mContext)
         alarmHelper.setAlarms()
@@ -89,5 +104,10 @@ class PreferenceHelper(private val mContext: Context) {
     fun getPrefValueByKey(key: String): Boolean {
         val preferences = getEncryptedSharedPreferences(mContext)
         return preferences.getBoolean(key, false)
+    }
+
+    fun getIntPrefValueByKey(key: String, defaultValue: Int = 1): Int {
+        val preferences = getEncryptedSharedPreferences(mContext)
+        return preferences.getInt(key, defaultValue)
     }
 }

@@ -8,17 +8,40 @@ import java.util.*
 
 class CalendarHelper {
 
+    companion object {
+        val EVENING_ANGEL_TIME_LABELS = listOf(
+            "10:10 PM",
+            "11:11 PM",
+            "12:12 AM",
+            "1:11 AM",
+            "2:22 AM",
+            "3:33 AM",
+            "4:44 AM",
+            "5:55 AM"
+        )
+        val DAYTIME_ANGEL_TIME_LABELS = listOf(
+            "10:10 AM",
+            "11:11 AM",
+            "12:12 PM",
+            "1:11 PM",
+            "2:22 PM",
+            "3:33 PM",
+            "4:44 PM",
+            "5:55 PM"
+        )
+    }
 
     val calendarsNighttime = arrayOfNulls<Calendar>(8)
-    // AM - 10:10, 11:11, 12:12, 1:11, 2:22, 3:33, 4:44, 5:55
-    // Getters
-
     val calendarsDaytime = arrayOfNulls<Calendar>(8)
-    // PM - 10:10, 11:11, 12:12, 1:11, 2:22, 3:33, 4:44, 5:55
 
     init {
         setCalendarsDaytime()
         setCalendarsNighttime()
+    }
+
+    fun getFilteredCalendarsNighttime(cutoffIndex: Int): List<Calendar> {
+        val validIndex = cutoffIndex.coerceIn(0, calendarsNighttime.size - 1)
+        return calendarsNighttime.take(validIndex + 1).filterNotNull()
     }
 
 

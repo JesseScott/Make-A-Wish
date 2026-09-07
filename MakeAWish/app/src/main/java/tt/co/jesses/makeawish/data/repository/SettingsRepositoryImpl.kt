@@ -7,10 +7,10 @@ import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import tt.co.jesses.makeawish.domain.helpers.AlarmHelper
 
 class SettingsRepositoryImpl(
-    private val context: Context
+    private val context: Context,
+    private val preferenceHelper: PreferenceHelper,
+    private val alarmHelper: AlarmHelper
 ) : SettingsRepository {
-
-    private val preferenceHelper = PreferenceHelper(context)
 
     override fun getPrefValue(key: String): Boolean {
         return preferenceHelper.getPrefValueByKey(key)
@@ -30,6 +30,6 @@ class SettingsRepositoryImpl(
 
     override fun completeOnboarding() {
         preferenceHelper.setPrefValueByKey(R.string.prefs_onboarding_completed.toString(), true)
-        AlarmHelper(context).setAlarms()
+        alarmHelper.setAlarms()
     }
 }

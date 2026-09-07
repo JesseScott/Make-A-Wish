@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,9 +26,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import tt.co.jesses.makeawish.helpers.AlarmHelper
+import androidx.activity.enableEdgeToEdge
+import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import tt.co.jesses.makeawish.ui.navigation.Screen
 import tt.co.jesses.makeawish.ui.screens.MainScreen
 import tt.co.jesses.makeawish.ui.screens.NotificationScreen
+import tt.co.jesses.makeawish.ui.screens.OnboardingScreen
 import tt.co.jesses.makeawish.ui.screens.SettingsScreen
 import tt.co.jesses.makeawish.ui.theme.MakeAWishTheme
 import tt.co.jesses.makeawish.utils.Constants
@@ -37,18 +40,26 @@ class MainActivity : ComponentActivity() {
 
     @RequiresPermission(allOf = [Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WAKE_LOCK])
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        FirebaseAnalytics.getInstance(this.applicationContext).setCurrentScreen(this@MainActivity, "MainActivity", MainActivity::class.java.simpleName)
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, MainActivity::class.java.simpleName)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, MainActivity::class.java.simpleName)
+        }
+        FirebaseAnalytics.getInstance(this.applicationContext).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
 
         val alarmHelper = AlarmHelper(applicationContext)
         alarmHelper.setAlarms()
 
+        val preferenceHelper = PreferenceHelper(this)
+        val onboardingCompleted = preferenceHelper.getPrefValueByKey(getString(R.string.prefs_onboarding_completed))
+
         val navRoute = intent?.getStringExtra(Constants.EXTRA_NAVIGATION_ROUTE)
-        val startDestination = if (navRoute == Screen.NOTIFICATION.route) {
-            Screen.NOTIFICATION.route
-        } else {
-            Screen.MAIN.route
+        val startDestination = when {
+            navRoute == Screen.NOTIFICATION.route -> Screen.NOTIFICATION.route
+            !onboardingCompleted -> Screen.ONBOARDING.route
+            else -> Screen.MAIN.route
         }
 
         setContent {
@@ -56,10 +67,6 @@ class MainActivity : ComponentActivity() {
                 MakeAWishApp(startDestination = startDestination)
             }
         }
-    }
-
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
     }
 }
 
@@ -72,7 +79,9 @@ fun MakeAWishApp(startDestination: String) {
 
     Scaffold(
         topBar = {
-            if (currentRoute == Screen.MAIN.route) {
+            if (currentRoute == Screen.ONBOARDING.route) {
+                // Hide top bar during onboarding
+            } else if (currentRoute == Screen.MAIN.route) {
                 TopAppBar(
                     title = { Text(stringResource(R.string.app_name)) },
                     actions = {
@@ -95,7 +104,7 @@ fun MakeAWishApp(startDestination: String) {
                     },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors()
@@ -108,11 +117,26 @@ fun MakeAWishApp(startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.ONBOARDING.route) {
+                OnboardingScreen(
+                    onFinishOnboarding = {
+                        navController.navigate(Screen.MAIN.route) {
+                            popUpTo(Screen.ONBOARDING.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(Screen.MAIN.route) {
-                MainScreen(onSettingsClick = { navController.navigate(Screen.SETTINGS.route) })
+                MainScreen()
             }
             composable(Screen.SETTINGS.route) {
-                SettingsScreen()
+                SettingsScreen(
+                    onRestartOnboarding = {
+                        navController.navigate(Screen.ONBOARDING.route) {
+                            popUpTo(Screen.MAIN.route) { inclusive = false }
+                        }
+                    }
+                )
             }
             composable(Screen.NOTIFICATION.route) {
                 NotificationScreen()

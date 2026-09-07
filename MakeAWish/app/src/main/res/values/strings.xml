@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">Make a Wish</string>
+    <string name="app_name">Angel Hours</string>
 
     <string name="settings">Settings</string>
 
-    <string name="notification_placeholder">Show Notification Details Here…</string>
+    <string name="notification_placeholder">✨ An angel hour is upon you. Take a deep breath, release your worries, and set your highest intention.</string>
 
-    <string name="receiver_title">Make a Wish!</string>
-    <string name="receiver_text">New Notification!</string>
-    <string name="receiver_ticker">New Message Alert!</string>
+    <string name="receiver_title">✨ Angel Alignment</string>
+    <string name="receiver_text">An angel number is here. Pause and set your intention.</string>
+    <string name="receiver_ticker">Angel Number Presence</string>
 
     <string name="settings_enable_notifications">Enable notifications</string>
-    <string name="settings_enable_daytime_alarms">Enable Daytime Alarms (10am - 5pm)</string>
-    <string name="settings_enable_nighttime_alarms">Enable Nighttime Alarms (10pm - 5am)</string>
+    <string name="settings_enable_daytime_alarms">Enable Daytime Angel Reminders (10:10 AM - 5:55 PM)</string>
+    <string name="settings_enable_nighttime_alarms">Enable Evening Angel Reminders (10:10 PM - 5:55 AM)</string>
     <string name="settings_enable_analytics">Enable analytics</string>
 
     <string name="prefs_enable_notifications">prefs_enable_notifications</string>
@@ -21,15 +21,33 @@
 
     <string name="prefs_daytime_set">prefs_daytime_set</string>
     <string name="prefs_nighttime_set">prefs_nighttime_set</string>
+    <string name="prefs_onboarding_completed">prefs_onboarding_completed</string>
+    <string name="prefs_evening_cutoff_index">prefs_evening_cutoff_index</string>
 
     <string name="prefs_log_event">prefs_log_event</string>
 
-    <string name="channel_name">Make a Wish</string>
-    <string name="channel_description">Channel for Make a Wish notifications</string>
+    <string name="channel_name">Angel Hours Alignments</string>
+    <string name="channel_description">Gentle notifications for repeating angel numbers and celestial presence.</string>
 
-    <string name="dialog_title_make_wish">Make a New Wish</string>
-    <string name="dialog_label_enter_wish">Enter your wish</string>
-    <string name="dialog_btn_save">Save</string>
+    <string name="dialog_title_make_wish">Record Your Intention</string>
+    <string name="dialog_label_enter_wish">Write your prayer or intention…</string>
+    <string name="dialog_btn_save">Manifest</string>
     <string name="dialog_btn_cancel">Cancel</string>
+
+    <!-- Onboarding & Bedtime Cutoff Strings -->
+    <string name="onboarding_welcome_title">Welcome to Angel Hours</string>
+    <string name="onboarding_welcome_desc">Align your mind with repeating angel numbers (11:11, 2:22, 3:33). Take a deep breath, connect with divine presence, and set your intentions.</string>
+    <string name="onboarding_daytime_title">Daytime Angel Alignments</string>
+    <string name="onboarding_daytime_desc">Receive gentle celestial prompts during daytime angel hours (10:10 AM – 5:55 PM).</string>
+    <string name="onboarding_evening_title">Evening Alignments &amp; Rest Protection</string>
+    <string name="onboarding_evening_desc">Set your bedtime cutoff so your sleep remains peaceful and undisturbed.</string>
+    <string name="onboarding_permissions_title">Divine Connections</string>
+    <string name="onboarding_permissions_desc">Enable notifications so you never miss an angelic presence.</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_get_started">Get Started</string>
+    <string name="btn_grant_permission">Enable Notifications</string>
+    <string name="bedtime_cutoff_label">Bedtime Cutoff</string>
+    <string name="bedtime_cutoff_subtitle">Angel reminders active until: %1$s</string>
+    <string name="bedtime_sleep_hours">Rest Hours (Reminders Paused)</string>
 
 </resources>

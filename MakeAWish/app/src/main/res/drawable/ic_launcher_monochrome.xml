@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Angelic Wings -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 54,54 C 42,42 26,38 20,48 C 16,55 24,66 36,68 C 44,70 52,62 54,54 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 54,54 C 66,42 82,38 88,48 C 92,55 84,66 72,68 C 64,70 56,62 54,54 Z" />
+
+    <!-- Halo Ring -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 54,28 A 26,10 0 1,0 54,48 A 26,10 0 1,0 54,28 Z M 54,32 A 22,7 0 1,1 54,44 A 22,7 0 1,1 54,32 Z" />
+
+    <!-- Cross Light Rays -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 54,16 Q 56,54 54,92 Q 52,54 54,16 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 16,54 Q 54,56 92,54 Q 54,52 16,54 Z" />
+
+</vector>

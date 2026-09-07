@@ -22,23 +22,23 @@ class MainScreenTest {
     @Test
     fun makeAWishFlow() {
         composeTestRule.setContent {
-            MainScreen(onSettingsClick = {})
+            MainScreen()
         }
 
         // 1. Click FAB
         composeTestRule.onNodeWithContentDescription("Add").performClick()
 
-        // 2. Check if Dialog appears (title "Make a New Wish")
-        composeTestRule.onNodeWithText("Make a New Wish").assertExists()
+        // 2. Check if Dialog appears (title "Record Your Intention")
+        composeTestRule.onNodeWithText("Record Your Intention").assertExists()
 
         // 3. Enter Text
-        composeTestRule.onNodeWithText("Enter your wish").performTextInput("I wish for 100% code coverage")
+        composeTestRule.onNodeWithText("Write your prayer or intention…").performTextInput("I intend for 100% code coverage")
 
-        // 4. Click Save
-        composeTestRule.onNodeWithText("Save").performClick()
+        // 4. Click Save ("Manifest")
+        composeTestRule.onNodeWithText("Manifest").performClick()
 
         // 5. Verify Dialog Disappears
         // The dialog dismissal happens after a database insert in a coroutine, so we must wait.
-        composeTestRule.waitUntilDoesNotExist(hasText("Make a New Wish"), timeoutMillis = 5000)
+        composeTestRule.waitUntilDoesNotExist(hasText("Record Your Intention"), timeoutMillis = 5000)
     }
 }

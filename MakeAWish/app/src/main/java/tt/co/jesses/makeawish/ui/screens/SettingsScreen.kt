@@ -1,6 +1,7 @@
 package tt.co.jesses.makeawish.ui.screens
 
-import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,18 +25,52 @@ import androidx.compose.ui.unit.dp
 import tt.co.jesses.makeawish.R
 import tt.co.jesses.makeawish.helpers.PreferenceHelper
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.runtime.mutableIntStateOf
+import tt.co.jesses.makeawish.ui.components.BedtimeCutoffSlider
+
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    onRestartOnboarding: (() -> Unit)? = null
+) {
     val context = LocalContext.current
     val preferenceHelper = remember { PreferenceHelper(context) }
+    val nighttimeKey = stringResource(R.string.prefs_enable_nighttime_alarms)
+    val cutoffKey = stringResource(R.string.prefs_evening_cutoff_index)
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        SettingsCheckbox(
-            title = stringResource(R.string.settings_enable_notifications),
-            key = stringResource(R.string.prefs_enable_notifications),
-            defaultValue = true,
-            preferenceHelper = preferenceHelper
+    var nighttimeEnabled by remember {
+        mutableStateOf(
+            try {
+                preferenceHelper.getPrefValueByKey(nighttimeKey)
+            } catch (e: Exception) {
+                Log.d("SettingsScreen", "Error getting preference: $nighttimeKey $e")
+                false
+            }
         )
+    }
+
+    var cutoffIndex by remember {
+        mutableIntStateOf(
+            try {
+                preferenceHelper.getIntPrefValueByKey(cutoffKey, 1)
+            } catch (e: Exception) {
+                Log.d("SettingsScreen", "Error getting preference: $cutoffKey $e")
+                1
+            }
+        )
+    }
+
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_daytime_alarms),
             key = stringResource(R.string.prefs_enable_daytime_alarms),
@@ -44,16 +79,54 @@ fun SettingsScreen() {
         )
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_nighttime_alarms),
-            key = stringResource(R.string.prefs_enable_nighttime_alarms),
+            key = nighttimeKey,
             defaultValue = false,
-            preferenceHelper = preferenceHelper
+            preferenceHelper = preferenceHelper,
+            onCheckedChange = { nighttimeEnabled = it }
         )
+
+        AnimatedVisibility(visible = nighttimeEnabled) {
+            Column {
+                Spacer(modifier = Modifier.height(12.dp))
+                BedtimeCutoffSlider(
+                    cutoffIndex = cutoffIndex,
+                    onCutoffIndexChange = { newIndex ->
+                        cutoffIndex = newIndex
+                        preferenceHelper.setIntPrefValueByKey(cutoffKey, newIndex)
+                    }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_analytics),
             key = stringResource(R.string.prefs_enable_analytics),
             defaultValue = true,
             preferenceHelper = preferenceHelper
         )
+
+        if (tt.co.jesses.makeawish.BuildConfig.DEBUG) {
+            val onboardingCompletedKey = stringResource(R.string.prefs_onboarding_completed)
+            Spacer(modifier = Modifier.height(28.dp))
+            OutlinedButton(
+                onClick = {
+                    preferenceHelper.setPrefValueByKey(
+                        onboardingCompletedKey,
+                        false
+                    )
+                    Toast.makeText(context, "Onboarding reset for debug!", Toast.LENGTH_SHORT).show()
+                    onRestartOnboarding?.invoke()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error
+                )
+            ) {
+                Text("🛠️ Debug: Reset Onboarding")
+            }
+        }
     }
 }
 
@@ -62,13 +135,15 @@ fun SettingsCheckbox(
     title: String,
     key: String,
     defaultValue: Boolean,
-    preferenceHelper: PreferenceHelper
+    preferenceHelper: PreferenceHelper,
+    onCheckedChange: ((Boolean) -> Unit)? = null
 ) {
     var checked by remember {
         mutableStateOf(
             try {
                 preferenceHelper.getPrefValueByKey(key)
             } catch (e: Exception) {
+                Log.d("SettingsScreen", "Error getting preference: $e")
                 defaultValue
             }
         )
@@ -85,9 +160,10 @@ fun SettingsCheckbox(
             .fillMaxWidth()
             .toggleable(
                 value = checked,
-                onValueChange = {
-                    checked = it
-                    preferenceHelper.setPrefValueByKey(key, it)
+                onValueChange = { newValue ->
+                    checked = newValue
+                    preferenceHelper.setPrefValueByKey(key, newValue)
+                    onCheckedChange?.invoke(newValue)
                 },
                 role = Role.Checkbox
             )

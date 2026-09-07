@@ -38,4 +38,5 @@ jobs:
         api-level: ${{ matrix.api-level }}
         target: ${{ matrix.target }}
         arch: x86_64
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
         script: cd MakeAWish && ./gradlew connectedCheck

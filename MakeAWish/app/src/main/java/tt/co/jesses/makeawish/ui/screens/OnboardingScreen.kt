@@ -3,9 +3,11 @@ package tt.co.jesses.makeawish.ui.screens
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -37,6 +38,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,12 +49,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.launch
 import tt.co.jesses.makeawish.R
 import tt.co.jesses.makeawish.helpers.AlarmHelper
@@ -77,15 +83,13 @@ fun OnboardingScreen(
 
     var daytimeEnabled by remember {
         mutableStateOf(
-            preferenceHelper.getPrefValueByKey(prefsEnableDaytimeKey)
-                    || true // Default true for new users
+            true // Default true for new users
         )
     }
 
     var nighttimeEnabled by remember {
         mutableStateOf(
-            preferenceHelper.getPrefValueByKey(prefsEnableNighttimeKey)
-                    || true // Default true for evening angel times
+            true // Default true for evening angel times
         )
     }
 
@@ -95,23 +99,38 @@ fun OnboardingScreen(
         )
     }
 
+    fun checkPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
     var hasNotificationPermission by remember {
-        mutableStateOf(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-            } else {
-                true
+        mutableStateOf(checkPermission())
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                hasNotificationPermission = checkPermission()
             }
-        )
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
-            hasNotificationPermission = isGranted
+            hasNotificationPermission = isGranted || checkPermission()
         }
     )
 
@@ -145,7 +164,7 @@ fun OnboardingScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (pagerState.currentPage < 3) {
-                    TextButton(onClick = { savePreferencesAndComplete() }) {
+                    TextButton(onClick = { onFinishOnboarding() }) {
                         Text(text = "Skip", style = MaterialTheme.typography.labelLarge)
                     }
                 }
@@ -229,11 +248,22 @@ fun OnboardingScreen(
                         Text(text = stringResource(R.string.btn_next))
                     }
                 } else {
+                    val toastMsg = "Please allow notification permissions to receive angel reminders."
                     Button(
-                        onClick = { savePreferencesAndComplete() },
+                        onClick = {
+                            if (!hasNotificationPermission) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                }
+                                Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show()
+                            } else {
+                                savePreferencesAndComplete()
+                            }
+                        },
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
+                            containerColor = if (hasNotificationPermission) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
+                            contentColor = if (hasNotificationPermission) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     ) {
                         Text(
@@ -256,11 +286,15 @@ private fun OnboardingWelcomePage() {
     ) {
         Surface(
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier.size(100.dp)
+            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+            modifier = Modifier.size(120.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Text(text = "🌟", fontSize = 52.sp)
+                Image(
+                    painter = painterResource(R.drawable.ic_angel_ethereal),
+                    contentDescription = "Angel Hours Celestial Icon",
+                    modifier = Modifier.size(100.dp)
+                )
             }
         }
 

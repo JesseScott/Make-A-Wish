@@ -130,7 +130,13 @@ fun MakeAWishApp(startDestination: String) {
                 MainScreen()
             }
             composable(Screen.SETTINGS.route) {
-                SettingsScreen()
+                SettingsScreen(
+                    onRestartOnboarding = {
+                        navController.navigate(Screen.ONBOARDING.route) {
+                            popUpTo(Screen.MAIN.route) { inclusive = false }
+                        }
+                    }
+                )
             }
             composable(Screen.NOTIFICATION.route) {
                 NotificationScreen()

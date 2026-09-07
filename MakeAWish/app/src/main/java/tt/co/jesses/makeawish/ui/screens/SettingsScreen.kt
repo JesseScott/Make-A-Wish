@@ -1,6 +1,7 @@
 package tt.co.jesses.makeawish.ui.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,11 +30,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.mutableIntStateOf
 import tt.co.jesses.makeawish.ui.components.BedtimeCutoffSlider
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    onRestartOnboarding: (() -> Unit)? = null
+) {
     val context = LocalContext.current
     val preferenceHelper = remember { PreferenceHelper(context) }
     val nighttimeKey = stringResource(R.string.prefs_enable_nighttime_alarms)
@@ -44,6 +49,7 @@ fun SettingsScreen() {
             try {
                 preferenceHelper.getPrefValueByKey(nighttimeKey)
             } catch (e: Exception) {
+                Log.d("SettingsScreen", "Error getting preference: $nighttimeKey $e")
                 false
             }
         )
@@ -53,7 +59,8 @@ fun SettingsScreen() {
         mutableIntStateOf(
             try {
                 preferenceHelper.getIntPrefValueByKey(cutoffKey, 1)
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Log.d("SettingsScreen", "Error getting preference: $cutoffKey $e")
                 1
             }
         )
@@ -99,6 +106,27 @@ fun SettingsScreen() {
             defaultValue = true,
             preferenceHelper = preferenceHelper
         )
+
+        if (tt.co.jesses.makeawish.BuildConfig.DEBUG) {
+            val onboardingCompletedKey = stringResource(R.string.prefs_onboarding_completed)
+            Spacer(modifier = Modifier.height(28.dp))
+            OutlinedButton(
+                onClick = {
+                    preferenceHelper.setPrefValueByKey(
+                        onboardingCompletedKey,
+                        false
+                    )
+                    Toast.makeText(context, "Onboarding reset for debug!", Toast.LENGTH_SHORT).show()
+                    onRestartOnboarding?.invoke()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error
+                )
+            ) {
+                Text("🛠️ Debug: Reset Onboarding")
+            }
+        }
     }
 }
 

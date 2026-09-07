@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Secondary Stardust Trail (Faded outer glow) -->
+    <path
+        android:pathData="M 23,80 C 27,80 37,73 45,62 C 53,51 54,44 54,44 C 54,44 48,51 40,61 C 32,71 23,80 23,80 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="23"
+                android:startY="80"
+                android:endX="54"
+                android:endY="44"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00FFD54F" />
+                <item android:offset="0.5" android:color="#55FFB300" />
+                <item android:offset="1.0" android:color="#AAFFE082" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Main Shooting Star Trail -->
+    <path
+        android:pathData="M 26,78 C 30,78 38,71 45,61 C 52,51 53,44 53,44 C 53,44 48,50 41,59 C 34,68 26,78 26,78 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="26"
+                android:startY="78"
+                android:endX="53"
+                android:endY="44"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#1AFFFFFF" />
+                <item android:offset="0.4" android:color="#99FFCA28" />
+                <item android:offset="1.0" android:color="#FFFFE082" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Outer Star Glow (Soft backdrop) -->
+    <path
+        android:fillColor="#33FFD54F"
+        android:pathData="M 56,23 L 60.5,35.8 L 74.1,36.2 L 63.5,49.5 L 67.2,57.3 L 56,49.8 L 44.8,57.3 L 48.5,49.5 L 37.9,36.2 L 51.5,35.8 Z" />
+
+    <!-- Main Golden Wishing Star -->
+    <path
+        android:pathData="M 56,27 L 59.6,37.0 L 70.3,37.4 L 61.9,47.9 L 64.8,54.1 L 56,48.2 L 47.2,54.1 L 50.1,47.9 L 41.7,37.4 L 52.4,37.0 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="56"
+                android:startY="27"
+                android:endX="56"
+                android:endY="54"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FFF8E1" />
+                <item android:offset="0.3" android:color="#FFD54F" />
+                <item android:offset="0.85" android:color="#FFB300" />
+                <item android:offset="1.0" android:color="#FF8F00" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Star Core Highlight -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M 56,29 L 58,35.5 L 64,35.8 L 59,41 L 60.5,45.5 L 56,42 L 51.5,45.5 L 53,41 L 48,35.8 L 54,35.5 Z" />
+
+    <!-- Magic Sparkle 1 (Top Left, large) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M 34,26 Q 34,32 40,32 Q 34,32 34,38 Q 34,32 28,32 Q 34,32 34,26 Z" />
+
+    <!-- Magic Sparkle 2 (Right, medium) -->
+    <path
+        android:fillColor="#FFFFECB3"
+        android:pathData="M 76,47.5 Q 76,52 80.5,52 Q 76,52 76,56.5 Q 76,52 71.5,52 Q 76,52 76,47.5 Z" />
+
+    <!-- Magic Sparkle 3 (Bottom Left, small) -->
+    <path
+        android:fillColor="#FFFFE082"
+        android:pathData="M 38,66.5 Q 38,70 41.5,70 Q 38,70 38,73.5 Q 38,70 34.5,70 Q 38,70 38,66.5 Z" />
+
+    <!-- Magic Sparkle 4 (Top Right, tiny) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M 68,21 Q 68,24 71,24 Q 68,24 68,27 Q 68,24 65,24 Q 68,24 68,21 Z" />
+
+    <!-- Floating Stardust Orbs -->
+    <path
+        android:fillColor="#FFFFECB3"
+        android:pathData="M 31,71 m -1.5,0 a 1.5,1.5 0 1,0 3,0 a 1.5,1.5 0 1,0 -3,0" />
+    <path
+        android:fillColor="#FFFFD54F"
+        android:pathData="M 37,60 m -1.8,0 a 1.8,1.8 0 1,0 3.6,0 a 1.8,1.8 0 1,0 -3.6,0" />
+    <path
+        android:fillColor="#FFFFE082"
+        android:pathData="M 45,52 m -1.5,0 a 1.5,1.5 0 1,0 3,0 a 1.5,1.5 0 1,0 -3,0" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M 62,33 m -1.2,0 a 1.2,1.2 0 1,0 2.4,0 a 1.2,1.2 0 1,0 -2.4,0" />
+    <path
+        android:fillColor="#FFFFECB3"
+        android:pathData="M 72,41 m -1.0,0 a 1.0,1.0 0 1,0 2.0,0 a 1.0,1.0 0 1,0 -2.0,0" />
+
+</vector>

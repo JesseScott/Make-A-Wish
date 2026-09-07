@@ -5,29 +5,25 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Shooting Star Trail -->
+    <!-- Angelic Wings -->
     <path
         android:fillColor="#FF000000"
-        android:pathData="M 26,78 C 30,78 38,71 45,61 C 52,51 53,44 53,44 C 53,44 48,50 41,59 C 34,68 26,78 26,78 Z" />
+        android:pathData="M 54,54 C 42,42 26,38 20,48 C 16,55 24,66 36,68 C 44,70 52,62 54,54 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 54,54 C 66,42 82,38 88,48 C 92,55 84,66 72,68 C 64,70 56,62 54,54 Z" />
 
-    <!-- Main Wishing Star -->
+    <!-- Halo Ring -->
     <path
         android:fillColor="#FF000000"
-        android:pathData="M 56,27 L 59.6,37.0 L 70.3,37.4 L 61.9,47.9 L 64.8,54.1 L 56,48.2 L 47.2,54.1 L 50.1,47.9 L 41.7,37.4 L 52.4,37.0 Z" />
+        android:pathData="M 54,28 A 26,10 0 1,0 54,48 A 26,10 0 1,0 54,28 Z M 54,32 A 22,7 0 1,1 54,44 A 22,7 0 1,1 54,32 Z" />
 
-    <!-- Sparkle 1 -->
+    <!-- Cross Light Rays -->
     <path
         android:fillColor="#FF000000"
-        android:pathData="M 34,26 Q 34,32 40,32 Q 34,32 34,38 Q 34,32 28,32 Q 34,32 34,26 Z" />
-
-    <!-- Sparkle 2 -->
+        android:pathData="M 54,16 Q 56,54 54,92 Q 52,54 54,16 Z" />
     <path
         android:fillColor="#FF000000"
-        android:pathData="M 76,47.5 Q 76,52 80.5,52 Q 76,52 76,56.5 Q 76,52 71.5,52 Q 76,52 76,47.5 Z" />
-
-    <!-- Sparkle 3 -->
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M 38,66.5 Q 38,70 41.5,70 Q 38,70 38,73.5 Q 38,70 34.5,70 Q 38,70 38,66.5 Z" />
+        android:pathData="M 16,54 Q 54,56 92,54 Q 54,52 16,54 Z" />
 
 </vector>

@@ -47,7 +47,7 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_enable_daytime_alarms),
             key = R.string.prefs_enable_daytime_alarms.toString(),
             defaultValue = true,
-            onCheckedChange = { viewModel.setAnalyticsEnabled(it) }
+            onCheckedChange = { viewModel.setDaytimeEnabled(it) }
         )
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_nighttime_alarms),

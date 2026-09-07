@@ -16,8 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
@@ -35,6 +34,8 @@ import tt.co.jesses.makeawish.ui.screens.OnboardingScreen
 import tt.co.jesses.makeawish.ui.screens.SettingsScreen
 import tt.co.jesses.makeawish.ui.theme.MakeAWishTheme
 import tt.co.jesses.makeawish.utils.Constants
+import tt.co.jesses.makeawish.data.repository.SettingsRepositoryImpl
+import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -62,9 +63,12 @@ class MainActivity : ComponentActivity() {
             else -> Screen.MAIN.route
         }
 
+        val settingsRepository = SettingsRepositoryImpl(applicationContext)
+        val settingsViewModel = SettingsViewModel(settingsRepository)
+
         setContent {
             MakeAWishTheme {
-                MakeAWishApp(startDestination = startDestination)
+                MakeAWishApp(startDestination = startDestination, settingsViewModel = settingsViewModel)
             }
         }
     }
@@ -72,7 +76,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MakeAWishApp(startDestination: String) {
+fun MakeAWishApp(startDestination: String, settingsViewModel: SettingsViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: startDestination
@@ -119,6 +123,7 @@ fun MakeAWishApp(startDestination: String) {
         ) {
             composable(Screen.ONBOARDING.route) {
                 OnboardingScreen(
+                    viewModel = settingsViewModel,
                     onFinishOnboarding = {
                         navController.navigate(Screen.MAIN.route) {
                             popUpTo(Screen.ONBOARDING.route) { inclusive = true }
@@ -131,6 +136,7 @@ fun MakeAWishApp(startDestination: String) {
             }
             composable(Screen.SETTINGS.route) {
                 SettingsScreen(
+                    viewModel = settingsViewModel,
                     onRestartOnboarding = {
                         navController.navigate(Screen.ONBOARDING.route) {
                             popUpTo(Screen.MAIN.route) { inclusive = false }

@@ -12,24 +12,24 @@ class SettingsRepositoryImpl(
     private val alarmHelper: AlarmHelper
 ) : SettingsRepository {
 
-    override fun getPrefValue(key: String): Boolean {
-        return preferenceHelper.getPrefValueByKey(key)
+    override fun getPrefValue(key: Int): Boolean {
+        return preferenceHelper.getPrefValueByKey(context.getString(key))
     }
 
-    override fun getIntPrefValue(key: String, defaultValue: Int): Int {
-        return preferenceHelper.getIntPrefValueByKey(key, defaultValue)
+    override fun getIntPrefValue(key: Int, defaultValue: Int): Int {
+        return preferenceHelper.getIntPrefValueByKey(context.getString(key), defaultValue)
     }
 
-    override fun setPrefValue(key: String, value: Boolean) {
-        preferenceHelper.setPrefValueByKey(key, value)
+    override fun setPrefValue(key: Int, value: Boolean) {
+        preferenceHelper.setPrefValueByKey(context.getString(key), value)
     }
 
-    override fun setIntPrefValue(key: String, value: Int) {
-        preferenceHelper.setIntPrefValueByKey(key, value)
+    override fun setIntPrefValue(key: Int, value: Int) {
+        preferenceHelper.setIntPrefValueByKey(context.getString(key), value)
     }
 
     override fun completeOnboarding() {
-        preferenceHelper.setPrefValueByKey(R.string.prefs_onboarding_completed.toString(), true)
+        preferenceHelper.setPrefValueByKey(context.getString(R.string.prefs_onboarding_completed), true)
         alarmHelper.setAlarms()
     }
 }

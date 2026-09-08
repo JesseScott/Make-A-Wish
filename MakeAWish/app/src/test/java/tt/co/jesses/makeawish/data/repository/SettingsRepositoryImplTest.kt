@@ -30,30 +30,42 @@ class SettingsRepositoryImplTest {
 
     @Test
     fun `getPrefValue returns true when preference is true`() {
-        every { mockPreferenceHelper.getPrefValueByKey(any()) } returns true
-        val result = repository.getPrefValue("test_key")
+        val testKey = R.string.prefs_enable_daytime_alarms
+        val testString = "prefs_enable_daytime_alarms"
+        every { context.getString(testKey) } returns testString
+        every { mockPreferenceHelper.getPrefValueByKey(testString) } returns true
+        val result = repository.getPrefValue(testKey)
         assertEquals(true, result)
-        verify { mockPreferenceHelper.getPrefValueByKey("test_key") }
+        verify { mockPreferenceHelper.getPrefValueByKey(testString) }
     }
 
     @Test
     fun `getIntPrefValue returns value when preference is set`() {
-        every { mockPreferenceHelper.getIntPrefValueByKey(any(), any()) } returns 42
-        val result = repository.getIntPrefValue("test_key", 0)
+        val testKey = R.string.prefs_enable_daytime_alarms
+        val testString = "prefs_enable_daytime_alarms"
+        every { context.getString(testKey) } returns testString
+        every { mockPreferenceHelper.getIntPrefValueByKey(testString, 0) } returns 42
+        val result = repository.getIntPrefValue(testKey, 0)
         assertEquals(42, result)
-        verify { mockPreferenceHelper.getIntPrefValueByKey("test_key", 0) }
+        verify { mockPreferenceHelper.getIntPrefValueByKey(testString, 0) }
     }
 
     @Test
     fun `setPrefValue calls preferenceHelper`() {
-        repository.setPrefValue("test_key", true)
-        verify { mockPreferenceHelper.setPrefValueByKey("test_key", true) }
+        val testKey = R.string.prefs_enable_daytime_alarms
+        val testString = "prefs_enable_daytime_alarms"
+        every { context.getString(testKey) } returns testString
+        repository.setPrefValue(testKey, true)
+        verify { mockPreferenceHelper.setPrefValueByKey(testString, true) }
     }
 
     @Test
     fun `setPrefValue calls AlarmHelper when completeOnboarding is called`() {
+        val testKey = R.string.prefs_onboarding_completed
+        val testString = "prefs_onboarding_completed"
+        every { context.getString(testKey) } returns testString
         repository.completeOnboarding()
-        verify { mockPreferenceHelper.setPrefValueByKey(R.string.prefs_onboarding_completed.toString(), true) }
+        verify { mockPreferenceHelper.setPrefValueByKey(testString, true) }
         verify { mockAlarmHelper.setAlarms() }
     }
 }

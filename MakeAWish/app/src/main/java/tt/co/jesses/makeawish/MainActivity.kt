@@ -34,8 +34,8 @@ import tt.co.jesses.makeawish.ui.screens.OnboardingScreen
 import tt.co.jesses.makeawish.ui.screens.SettingsScreen
 import tt.co.jesses.makeawish.ui.theme.MakeAWishTheme
 import tt.co.jesses.makeawish.utils.Constants
-import tt.co.jesses.makeawish.data.repository.SettingsRepositoryImpl
 import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModel
+import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -50,21 +50,16 @@ class MainActivity : ComponentActivity() {
         }
         FirebaseAnalytics.getInstance(this.applicationContext).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
 
-        val alarmHelper = AlarmHelper(applicationContext)
-        alarmHelper.setAlarms()
-
         val preferenceHelper = PreferenceHelper(this)
-        val onboardingCompleted = preferenceHelper.getPrefValueByKey(getString(R.string.prefs_onboarding_completed))
-
+        val alarmHelper = AlarmHelper(applicationContext)
+        val settingsViewModel = SettingsViewModelFactory(applicationContext, preferenceHelper, alarmHelper).create(SettingsViewModel::class.java)
+        
         val navRoute = intent?.getStringExtra(Constants.EXTRA_NAVIGATION_ROUTE)
         val startDestination = when {
             navRoute == Screen.NOTIFICATION.route -> Screen.NOTIFICATION.route
-            !onboardingCompleted -> Screen.ONBOARDING.route
+            !preferenceHelper.getPrefValueByKey(getString(R.string.prefs_onboarding_completed)) -> Screen.ONBOARDING.route
             else -> Screen.MAIN.route
         }
-
-        val settingsRepository = SettingsRepositoryImpl(applicationContext, preferenceHelper, alarmHelper)
-        val settingsViewModel = SettingsViewModel(settingsRepository)
 
         setContent {
             MakeAWishTheme {

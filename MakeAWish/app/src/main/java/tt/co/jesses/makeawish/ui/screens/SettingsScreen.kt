@@ -76,7 +76,7 @@ fun SettingsScreen(
         )
 
         if (BuildConfig.DEBUG) {
-            val onboardingCompletedKey = R.string.prefs_onboarding_completed.toString()
+            val onboardingCompletedKey = R.string.prefs_onboarding_completed
             Spacer(modifier = Modifier.height(28.dp))
             OutlinedButton(
                 onClick = {

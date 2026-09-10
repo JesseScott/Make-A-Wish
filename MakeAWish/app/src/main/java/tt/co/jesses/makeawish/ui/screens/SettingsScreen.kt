@@ -1,70 +1,43 @@
 package tt.co.jesses.makeawish.ui.screens
 
-import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import tt.co.jesses.makeawish.BuildConfig
 import tt.co.jesses.makeawish.R
-import tt.co.jesses.makeawish.helpers.PreferenceHelper
-
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.runtime.mutableIntStateOf
 import tt.co.jesses.makeawish.ui.components.BedtimeCutoffSlider
+import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
+    viewModel: SettingsViewModel,
     onRestartOnboarding: (() -> Unit)? = null
 ) {
     val context = LocalContext.current
-    val preferenceHelper = remember { PreferenceHelper(context) }
-    val nighttimeKey = stringResource(R.string.prefs_enable_nighttime_alarms)
-    val cutoffKey = stringResource(R.string.prefs_evening_cutoff_index)
-
-    var nighttimeEnabled by remember {
-        mutableStateOf(
-            try {
-                preferenceHelper.getPrefValueByKey(nighttimeKey)
-            } catch (e: Exception) {
-                Log.d("SettingsScreen", "Error getting preference: $nighttimeKey $e")
-                false
-            }
-        )
-    }
-
-    var cutoffIndex by remember {
-        mutableIntStateOf(
-            try {
-                preferenceHelper.getIntPrefValueByKey(cutoffKey, 1)
-            } catch (e: Exception) {
-                Log.d("SettingsScreen", "Error getting preference: $cutoffKey $e")
-                1
-            }
-        )
-    }
+    val nighttimeEnabled by viewModel.nighttimeEnabled.collectAsState()
+    val cutoffIndex by viewModel.cutoffIndex.collectAsState()
+    val analyticsEnabled by viewModel.analyticsEnabled.collectAsState()
+    val daytimeEnabled by viewModel.daytimeEnabled.collectAsState()
 
     Column(
         modifier = Modifier
@@ -73,16 +46,13 @@ fun SettingsScreen(
     ) {
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_daytime_alarms),
-            key = stringResource(R.string.prefs_enable_daytime_alarms),
-            defaultValue = true,
-            preferenceHelper = preferenceHelper
+            checked = daytimeEnabled,
+            onCheckedChange = { viewModel.setDaytimeEnabled(it) }
         )
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_nighttime_alarms),
-            key = nighttimeKey,
-            defaultValue = false,
-            preferenceHelper = preferenceHelper,
-            onCheckedChange = { nighttimeEnabled = it }
+            checked = nighttimeEnabled,
+            onCheckedChange = { viewModel.setNighttimeEnabled(it) }
         )
 
         AnimatedVisibility(visible = nighttimeEnabled) {
@@ -91,8 +61,7 @@ fun SettingsScreen(
                 BedtimeCutoffSlider(
                     cutoffIndex = cutoffIndex,
                     onCutoffIndexChange = { newIndex ->
-                        cutoffIndex = newIndex
-                        preferenceHelper.setIntPrefValueByKey(cutoffKey, newIndex)
+                        viewModel.setCutoffIndex(newIndex)
                     }
                 )
             }
@@ -102,20 +71,16 @@ fun SettingsScreen(
 
         SettingsCheckbox(
             title = stringResource(R.string.settings_enable_analytics),
-            key = stringResource(R.string.prefs_enable_analytics),
-            defaultValue = true,
-            preferenceHelper = preferenceHelper
+            checked = analyticsEnabled,
+            onCheckedChange = { viewModel.setAnalyticsEnabled(it) }
         )
 
-        if (tt.co.jesses.makeawish.BuildConfig.DEBUG) {
-            val onboardingCompletedKey = stringResource(R.string.prefs_onboarding_completed)
+        if (BuildConfig.DEBUG) {
+            val onboardingCompletedKey = R.string.prefs_onboarding_completed
             Spacer(modifier = Modifier.height(28.dp))
             OutlinedButton(
                 onClick = {
-                    preferenceHelper.setPrefValueByKey(
-                        onboardingCompletedKey,
-                        false
-                    )
+                    viewModel.resetOnboarding()
                     Toast.makeText(context, "Onboarding reset for debug!", Toast.LENGTH_SHORT).show()
                     onRestartOnboarding?.invoke()
                 },
@@ -133,38 +98,15 @@ fun SettingsScreen(
 @Composable
 fun SettingsCheckbox(
     title: String,
-    key: String,
-    defaultValue: Boolean,
-    preferenceHelper: PreferenceHelper,
-    onCheckedChange: ((Boolean) -> Unit)? = null
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
-    var checked by remember {
-        mutableStateOf(
-            try {
-                preferenceHelper.getPrefValueByKey(key)
-            } catch (e: Exception) {
-                Log.d("SettingsScreen", "Error getting preference: $e")
-                defaultValue
-            }
-        )
-    }
-
-    // Initialize state from preference on composition
-    DisposableEffect(Unit) {
-        checked = preferenceHelper.getPrefValueByKey(key)
-        onDispose { }
-    }
-
     Row(
         Modifier
             .fillMaxWidth()
             .toggleable(
                 value = checked,
-                onValueChange = { newValue ->
-                    checked = newValue
-                    preferenceHelper.setPrefValueByKey(key, newValue)
-                    onCheckedChange?.invoke(newValue)
-                },
+                onValueChange = onCheckedChange,
                 role = Role.Checkbox
             )
             .padding(vertical = 8.dp),
@@ -172,7 +114,7 @@ fun SettingsCheckbox(
     ) {
         Checkbox(
             checked = checked,
-            onCheckedChange = null // null recommended for accessibility with toggleable modifier
+            onCheckedChange = null
         )
         Text(
             text = title,

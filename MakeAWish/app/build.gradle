@@ -71,6 +71,10 @@ dependencies {
     implementation "androidx.room:room-ktx:2.8.4"
     ksp "androidx.room:room-compiler:2.8.4"
 
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.6"
+
     // Tests
     androidTestImplementation('androidx.test.espresso:espresso-core:3.7.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -80,5 +84,9 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     androidTestImplementation 'tools.fastlane:screengrab:2.1.1'
     testImplementation 'junit:junit:4.13.2'
-
+    testImplementation "org.robolectric:robolectric:4.11.1"
+    testImplementation "io.mockk:mockk:1.13.8"
+    testImplementation "org.mockito:mockito-core:5.11.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
 }

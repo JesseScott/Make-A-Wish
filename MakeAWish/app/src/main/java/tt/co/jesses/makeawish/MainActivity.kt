@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -16,8 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
@@ -35,8 +35,17 @@ import tt.co.jesses.makeawish.ui.screens.OnboardingScreen
 import tt.co.jesses.makeawish.ui.screens.SettingsScreen
 import tt.co.jesses.makeawish.ui.theme.MakeAWishTheme
 import tt.co.jesses.makeawish.utils.Constants
+import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModel
+import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModelFactory
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var preferenceHelper: PreferenceHelper
+    private lateinit var alarmHelper: AlarmHelper
+
+    private val settingsViewModel: SettingsViewModel by viewModels {
+        SettingsViewModelFactory(applicationContext, preferenceHelper, alarmHelper)
+    }
 
     @RequiresPermission(allOf = [Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WAKE_LOCK])
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,22 +58,19 @@ class MainActivity : ComponentActivity() {
         }
         FirebaseAnalytics.getInstance(this.applicationContext).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
 
-        val alarmHelper = AlarmHelper(applicationContext)
-        alarmHelper.setAlarms()
-
-        val preferenceHelper = PreferenceHelper(this)
-        val onboardingCompleted = preferenceHelper.getPrefValueByKey(getString(R.string.prefs_onboarding_completed))
-
+        preferenceHelper = PreferenceHelper(this)
+        alarmHelper = AlarmHelper(applicationContext)
+        
         val navRoute = intent?.getStringExtra(Constants.EXTRA_NAVIGATION_ROUTE)
         val startDestination = when {
             navRoute == Screen.NOTIFICATION.route -> Screen.NOTIFICATION.route
-            !onboardingCompleted -> Screen.ONBOARDING.route
+            !preferenceHelper.getPrefValueByKey(getString(R.string.prefs_onboarding_completed)) -> Screen.ONBOARDING.route
             else -> Screen.MAIN.route
         }
 
         setContent {
             MakeAWishTheme {
-                MakeAWishApp(startDestination = startDestination)
+                MakeAWishApp(startDestination = startDestination, settingsViewModel = settingsViewModel)
             }
         }
     }
@@ -72,7 +78,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MakeAWishApp(startDestination: String) {
+fun MakeAWishApp(startDestination: String, settingsViewModel: SettingsViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: startDestination
@@ -119,6 +125,7 @@ fun MakeAWishApp(startDestination: String) {
         ) {
             composable(Screen.ONBOARDING.route) {
                 OnboardingScreen(
+                    viewModel = settingsViewModel,
                     onFinishOnboarding = {
                         navController.navigate(Screen.MAIN.route) {
                             popUpTo(Screen.ONBOARDING.route) { inclusive = true }
@@ -131,6 +138,7 @@ fun MakeAWishApp(startDestination: String) {
             }
             composable(Screen.SETTINGS.route) {
                 SettingsScreen(
+                    viewModel = settingsViewModel,
                     onRestartOnboarding = {
                         navController.navigate(Screen.ONBOARDING.route) {
                             popUpTo(Screen.MAIN.route) { inclusive = false }

@@ -37,14 +37,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,43 +54,23 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.launch
 import tt.co.jesses.makeawish.R
-import tt.co.jesses.makeawish.helpers.AlarmHelper
 import tt.co.jesses.makeawish.helpers.CalendarHelper
-import tt.co.jesses.makeawish.helpers.PreferenceHelper
 import tt.co.jesses.makeawish.ui.components.BedtimeCutoffSlider
+import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OnboardingScreen(
+    viewModel: SettingsViewModel,
     onFinishOnboarding: () -> Unit
 ) {
     val context = LocalContext.current
-    val preferenceHelper = remember { PreferenceHelper(context) }
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 4 })
 
-    val prefsEnableDaytimeKey = stringResource(R.string.prefs_enable_daytime_alarms)
-    val prefsEnableNighttimeKey = stringResource(R.string.prefs_enable_nighttime_alarms)
-    val prefsEveningCutoffKey = stringResource(R.string.prefs_evening_cutoff_index)
-    val prefsOnboardingCompletedKey = stringResource(R.string.prefs_onboarding_completed)
-
-    var daytimeEnabled by remember {
-        mutableStateOf(
-            true // Default true for new users
-        )
-    }
-
-    var nighttimeEnabled by remember {
-        mutableStateOf(
-            true // Default true for evening angel times
-        )
-    }
-
-    var cutoffIndex by remember {
-        mutableIntStateOf(
-            preferenceHelper.getIntPrefValueByKey(prefsEveningCutoffKey, 1) // Default 11:11 PM
-        )
-    }
+    val daytimeEnabled by viewModel.daytimeEnabled.collectAsState()
+    val nighttimeEnabled by viewModel.nighttimeEnabled.collectAsState()
+    val cutoffIndex by viewModel.cutoffIndex.collectAsState()
 
     fun checkPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -135,13 +108,10 @@ fun OnboardingScreen(
     )
 
     fun savePreferencesAndComplete() {
-        preferenceHelper.setPrefValueByKey(prefsEnableDaytimeKey, daytimeEnabled)
-        preferenceHelper.setPrefValueByKey(prefsEnableNighttimeKey, nighttimeEnabled)
-        preferenceHelper.setIntPrefValueByKey(prefsEveningCutoffKey, cutoffIndex)
-        preferenceHelper.setPrefValueByKey(prefsOnboardingCompletedKey, true)
-
-        val alarmHelper = AlarmHelper(context)
-        alarmHelper.setAlarms()
+        viewModel.setDaytimeEnabled(daytimeEnabled)
+        viewModel.setNighttimeEnabled(nighttimeEnabled)
+        viewModel.setCutoffIndex(cutoffIndex)
+        viewModel.completeOnboarding()
 
         onFinishOnboarding()
     }
@@ -188,13 +158,13 @@ fun OnboardingScreen(
                         0 -> OnboardingWelcomePage()
                         1 -> OnboardingDaytimePage(
                             daytimeEnabled = daytimeEnabled,
-                            onDaytimeToggle = { daytimeEnabled = it }
+                            onDaytimeToggle = { viewModel.setDaytimeEnabled(it) }
                         )
                         2 -> OnboardingEveningPage(
                             nighttimeEnabled = nighttimeEnabled,
-                            onNighttimeToggle = { nighttimeEnabled = it },
+                            onNighttimeToggle = { viewModel.setNighttimeEnabled(it) },
                             cutoffIndex = cutoffIndex,
-                            onCutoffIndexChange = { cutoffIndex = it }
+                            onCutoffIndexChange = { viewModel.setCutoffIndex(it) }
                         )
                         3 -> OnboardingPermissionsPage(
                             hasPermission = hasNotificationPermission,

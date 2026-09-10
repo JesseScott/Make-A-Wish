@@ -39,4 +39,7 @@ jobs:
         target: ${{ matrix.target }}
         arch: x86_64
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-        script: cd MakeAWish && ./gradlew connectedCheck
+        disable-animations: true
+        script: |
+          adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+          cd MakeAWish && ./gradlew connectedCheck

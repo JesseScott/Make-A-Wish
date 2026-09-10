@@ -43,3 +43,10 @@ jobs:
         script: |
           adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
           cd MakeAWish && ./gradlew connectedCheck
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: instrumented-test-results
+        path: MakeAWish/app/build/outputs/androidTest-results/

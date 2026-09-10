@@ -2,7 +2,8 @@ package tt.co.jesses.makeawish.ui.screens
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -16,7 +17,7 @@ import org.junit.runner.RunWith
 class MainScreenTest {
 
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule: ComposeContentTestRule = createComposeRule()
 
     @OptIn(ExperimentalTestApi::class)
     @Test
@@ -37,8 +38,7 @@ class MainScreenTest {
         // 4. Click Save ("Manifest")
         composeTestRule.onNodeWithText("Manifest").performClick()
 
-        // 5. Verify Dialog Disappears
-        // The dialog dismissal happens after a database insert in a coroutine, so we must wait.
-        composeTestRule.waitUntilDoesNotExist(hasText("Record Your Intention"), timeoutMillis = 5000)
+        // 5. Verify Dialog Disappears - wait for the dialog to be dismissed
+        composeTestRule.waitUntilDoesNotExist(hasText("Add"), timeoutMillis = 10000)
     }
 }

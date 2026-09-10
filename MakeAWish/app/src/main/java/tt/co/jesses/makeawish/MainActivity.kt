@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -39,6 +40,13 @@ import tt.co.jesses.makeawish.ui.viewmodels.SettingsViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
+    private lateinit var preferenceHelper: PreferenceHelper
+    private lateinit var alarmHelper: AlarmHelper
+
+    private val settingsViewModel: SettingsViewModel by viewModels {
+        SettingsViewModelFactory(applicationContext, preferenceHelper, alarmHelper)
+    }
+
     @RequiresPermission(allOf = [Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WAKE_LOCK])
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -50,9 +58,8 @@ class MainActivity : ComponentActivity() {
         }
         FirebaseAnalytics.getInstance(this.applicationContext).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
 
-        val preferenceHelper = PreferenceHelper(this)
-        val alarmHelper = AlarmHelper(applicationContext)
-        val settingsViewModel = SettingsViewModelFactory(applicationContext, preferenceHelper, alarmHelper).create(SettingsViewModel::class.java)
+        preferenceHelper = PreferenceHelper(this)
+        alarmHelper = AlarmHelper(applicationContext)
         
         val navRoute = intent?.getStringExtra(Constants.EXTRA_NAVIGATION_ROUTE)
         val startDestination = when {
